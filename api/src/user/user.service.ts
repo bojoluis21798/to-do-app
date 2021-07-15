@@ -15,6 +15,10 @@ export class UserService {
     return `User Successfully created`;
   }
 
+  findUserByEmail(email: string) {
+    return this.userModel.findOne({ email });
+  }
+
   findAll() {
     return `This action returns all user`;
   }

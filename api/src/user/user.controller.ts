@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ConflictException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,7 +16,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
+    if (this.userService.findUserByEmail(createUserDto.email)) {
+      throw new ConflictException('User with the same email exists');
+    }
+
     return this.userService.create(createUserDto);
   }
 
