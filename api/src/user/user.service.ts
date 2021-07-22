@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -10,8 +10,13 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   create(createUserDto: CreateUserDto) {
+    if (this.findUserByEmail(createUserDto.email)) {
+      throw new ConflictException('User with the same email exists');
+    }
+
     const newUser = new this.userModel(createUserDto);
     newUser.save();
+
     return `User Successfully created`;
   }
 
