@@ -1,15 +1,11 @@
-import { Application, Router } from 'express';
-import AuthRouter from './auth';
+import { Application } from 'express';
+import Routes from 'types/Routes';
+import AuthRouter from './auth/auth.routes';
 
-interface IRoute {
-  url: string;
-  router: Router;
-}
-
-const routes: IRoute[] = [AuthRouter];
+const routes: Routes[] = [AuthRouter()];
 
 const mapRoutes = (app: Application) => {
-  routes.map((route) => app.use(route.url, route.router));
+  routes.map((route) => app.use(route.routeBaseUrl, route.router));
 };
 
 export default mapRoutes;
