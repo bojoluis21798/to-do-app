@@ -1,18 +1,19 @@
 import { Request, Response } from 'express';
+import validatebody from 'middlewares/validatebody.middleware';
 import AuthService from './auth.service';
+import CreateUserDto from './dto/create-user.dto';
 
 const AuthController = {
   /**
-   * @route /guest
+   * @route /register
    * @method POST
-   * @payload none
-   * @description Sends guest userID and JWT token
+   * @payload User
+   * @description Register User.
    */
-  createGuest: [
+  register: [
+    validatebody(new CreateUserDto()),
     (req: Request, res: Response) => {
-      const guest = AuthService.createGuest();
-
-      res.send(guest);
+      res.send(AuthService.createUser(req.body));
     },
   ],
 };

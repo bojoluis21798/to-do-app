@@ -5,7 +5,7 @@ import AuthController from './auth.controller';
 const router = Router();
 
 const AuthRouter: RouteProvider = () => {
-  router.post('/guest', AuthController.createGuest);
+  router.post('/register', AuthController.register);
 
   return { routeBaseUrl: '/auth', router };
 };
