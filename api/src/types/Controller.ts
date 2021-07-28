@@ -4,7 +4,7 @@ import HTTPMethod from './HTTPMethod';
 type Controller = {
   method: HTTPMethod;
   pathName: string;
-  middlewares: RequestHandler[];
+  middlewares?: RequestHandler[];
   handler: RequestHandler;
 }[];
 

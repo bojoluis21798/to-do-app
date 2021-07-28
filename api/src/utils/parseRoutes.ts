@@ -5,7 +5,10 @@ const parseRoutes = (routeBaseUrl: string, controller: Controller) => {
   const router = Router();
 
   controller.forEach((c) => {
-    router[c.method](c.pathName, [...c.middlewares, c.handler]);
+    router[c.method](c.pathName, [
+      ...(c.middlewares ? c.middlewares : []),
+      c.handler,
+    ]);
   });
 
   return { routeBaseUrl, router };
