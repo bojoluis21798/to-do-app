@@ -26,6 +26,23 @@ const AuthController: Controller = [
       }
     },
   },
+  {
+    pathName: '/login',
+    method: HTTPMethod.POST,
+    middlewares: [validatebody(new CreateUserDto())],
+    handler: async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const token = await AuthService.logInUser(req.body);
+
+        res.send({
+          message: 'User successfully logged in',
+          token,
+        });
+      } catch (error) {
+        next(error);
+      }
+    },
+  },
 ];
 
 export default parseRoutes(baseUrl, AuthController);

@@ -10,7 +10,7 @@ const AuthService = {
    * @param createUserDto
    * @returns {string} JsonWebToken
    */
-  createUser: async (createUserDto: CreateUserDto) => {
+  createUser: async function (createUserDto: CreateUserDto) {
     if (await userModel.findOne({ email: createUserDto.email })) {
       throw new createHttpError.Conflict('User email already exists');
     }
@@ -26,6 +26,22 @@ const AuthService = {
     const token = jwt.sign(rest, 'jwt-secret');
 
     return token;
+  },
+  logInUser: async function (loginUser: CreateUserDto) {
+    const existingUser = await userModel.findOne({ email: loginUser.email });
+
+    if (
+      existingUser &&
+      (await bcrypt.compare(loginUser.password, existingUser.password))
+    ) {
+      const { password, ...rest } = loginUser;
+
+      const token = jwt.sign(rest, 'jwt-secret');
+
+      return token;
+    } else {
+      throw new createHttpError.Unauthorized('Incorrect email or password');
+    }
   },
 };
 
