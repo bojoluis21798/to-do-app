@@ -8,7 +8,7 @@ const AuthController = {
    * @payload none
    * @description Sends guest userID and JWT token
    */
-  registerGuest: [
+  createGuest: [
     (req: Request, res: Response) => {
       const guest = AuthService.createGuest();
 
