@@ -21,9 +21,9 @@ const AuthService = {
     const newUser = new userModel(createUserDto);
     await newUser.save();
 
-    const { password, ...rest } = createUserDto;
+    const { password, ...noPass } = createUserDto;
 
-    const token = jwt.sign(rest, 'jwt-secret');
+    const token = jwt.sign({ id: newUser._id, ...noPass }, 'jwt-secret');
 
     return token;
   },
