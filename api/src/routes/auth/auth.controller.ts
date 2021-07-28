@@ -1,21 +1,31 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import validatebody from 'middlewares/validatebody.middleware';
+import Controller from 'types/Controller';
+import HTTPMethod from 'types/HTTPMethod';
+import parseRoutes from 'utils/parseRoutes';
 import AuthService from './auth.service';
 import CreateUserDto from './dto/create-user.dto';
 
-const AuthController = {
-  /**
-   * @route /register
-   * @method POST
-   * @payload User
-   * @description Register User.
-   */
-  register: [
-    validatebody(new CreateUserDto()),
-    (req: Request, res: Response) => {
-      res.send(AuthService.createUser(req.body));
-    },
-  ],
-};
+const baseUrl = '/auth';
 
-export default AuthController;
+const AuthController: Controller = [
+  {
+    pathName: '/register',
+    method: HTTPMethod.POST,
+    middlewares: [validatebody(new CreateUserDto())],
+    handler: async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const token = await AuthService.createUser(req.body);
+
+        res.send({
+          message: 'User Created',
+          token,
+        });
+      } catch (error) {
+        next(error);
+      }
+    },
+  },
+];
+
+export default parseRoutes(baseUrl, AuthController);
