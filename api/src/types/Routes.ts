@@ -5,6 +5,6 @@ interface Route {
   router: Router;
 }
 
-export type RouteF = () => Route;
+export type RouteProvider = () => Route;
 
 export default Route;
