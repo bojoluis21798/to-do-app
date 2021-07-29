@@ -6,6 +6,7 @@ import winston from 'winston';
 import { Container } from 'typedi';
 
 import connectDb from 'db/connectDb';
+import ErrorHandler from 'middlewares/errorHandler.middleware';
 
 const app = express();
 
@@ -29,6 +30,8 @@ useContainer(Container);
 
 useExpressServer(app, {
   controllers: [__dirname + '/**/*.controller.ts'],
+  middlewares: [ErrorHandler],
+  defaultErrorHandler: false,
 });
 
 app.use(
