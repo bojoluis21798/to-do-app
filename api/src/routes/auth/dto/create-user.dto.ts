@@ -1,7 +1,7 @@
 import { IsEmail, MinLength } from 'class-validator';
 import { User } from 'models/user.model';
 
-class CreateUserDto implements User {
+class UserDTO implements User {
   @IsEmail()
   email: string;
 
@@ -9,4 +9,4 @@ class CreateUserDto implements User {
   password: string;
 }
 
-export default CreateUserDto;
+export default UserDTO;

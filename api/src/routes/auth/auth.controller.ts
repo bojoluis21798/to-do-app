@@ -1,7 +1,7 @@
 import { Body, JsonController, Post } from 'routing-controllers';
 import { Service } from 'typedi';
 import AuthService from './auth.service';
-import CreateUserDto from './dto/create-user.dto';
+import UserDTO from './dto/create-user.dto';
 
 @JsonController('/auth')
 @Service()
@@ -9,7 +9,7 @@ class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/register')
-  async registerUser(@Body() user: CreateUserDto) {
+  async registerUser(@Body() user: UserDTO) {
     const token = await this.authService.createUser(user);
 
     return {
@@ -19,7 +19,7 @@ class AuthController {
   }
 
   @Post('/login')
-  async loginUser(@Body() user: CreateUserDto) {
+  async loginUser(@Body() user: UserDTO) {
     const token = await this.authService.logInUser(user);
 
     return {
