@@ -1,13 +1,9 @@
-import { model, Schema } from 'mongoose';
-
-export interface Tags {
+import { getModelForClass, prop } from '@typegoose/typegoose';
+export class Tags {
+  @prop()
   name: string;
+  @prop()
   color: string;
 }
 
-const TagsSchema = new Schema<Tags>({
-  name: { type: String, required: true },
-  color: { type: String, required: true },
-});
-
-export default model<Tags>('Tags', TagsSchema);
+export default getModelForClass(Tags);
