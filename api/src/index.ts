@@ -1,9 +1,11 @@
 import 'reflect-metadata';
 import express from 'express';
-import { useExpressServer } from 'routing-controllers';
-import connectDb from 'db/connectDb';
+import { useContainer, useExpressServer } from 'routing-controllers';
 import expressWinston from 'express-winston';
 import winston from 'winston';
+import { Container } from 'typedi';
+
+import connectDb from 'db/connectDb';
 
 import AuthController from 'routes/auth/auth.controller';
 
@@ -24,6 +26,8 @@ app.use(
     }, // optional: allows to skip some log messages based on request and/or response
   }),
 );
+
+useContainer(Container);
 
 useExpressServer(app, {
   controllers: [AuthController],

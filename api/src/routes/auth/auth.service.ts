@@ -3,14 +3,16 @@ import userModel from 'models/user.model';
 import CreateUserDto from './dto/create-user.dto';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
+import { Service } from 'typedi';
 
-const AuthService = {
+@Service()
+class AuthService {
   /**
    * Create User
    * @param createUserDto
    * @returns {string} JsonWebToken
    */
-  createUser: async function (createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto) {
     if (await userModel.findOne({ email: createUserDto.email })) {
       throw new createHttpError.Conflict('User email already exists');
     }
@@ -26,8 +28,9 @@ const AuthService = {
     const token = jwt.sign({ id: newUser._id, ...noPass }, 'jwt-secret');
 
     return token;
-  },
-  logInUser: async function (loginUser: CreateUserDto) {
+  }
+
+  async logInUser(loginUser: CreateUserDto) {
     const existingUser = await userModel.findOne({ email: loginUser.email });
 
     if (
@@ -42,7 +45,7 @@ const AuthService = {
     } else {
       throw new createHttpError.Unauthorized('Incorrect email or password');
     }
-  },
-};
+  }
+}
 
 export default AuthService;
