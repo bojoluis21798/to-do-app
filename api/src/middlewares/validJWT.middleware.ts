@@ -2,7 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { ExpressMiddlewareInterface } from 'routing-controllers';
+import { Service } from 'typedi';
 
+@Service()
 class ValidJWT implements ExpressMiddlewareInterface {
   use(req: Request, res: Response, next: NextFunction) {
     const token = req.header('Authorization')?.replace('Bearer ', '');
