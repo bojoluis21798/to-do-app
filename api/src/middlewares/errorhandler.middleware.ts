@@ -7,7 +7,6 @@ const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('Error', err);
   if (err instanceof HttpError) {
     res.status(err.statusCode).send(err.message);
   } else {

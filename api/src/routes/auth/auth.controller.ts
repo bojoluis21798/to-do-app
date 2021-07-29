@@ -1,48 +1,28 @@
-import { NextFunction, Request, Response } from 'express';
-import validatebody from 'middlewares/validatebody.middleware';
-import Controller from 'types/Controller';
-import HTTPMethod from 'types/HTTPMethod';
-import parseRoutes from 'utils/parseRoutes';
+import { Body, JsonController, Post } from 'routing-controllers';
 import AuthService from './auth.service';
 import CreateUserDto from './dto/create-user.dto';
 
-const baseUrl = '/auth';
+@JsonController('/auth')
+class AuthController {
+  @Post('/register')
+  async registerUser(@Body() user: CreateUserDto) {
+    const token = await AuthService.createUser(user);
 
-const AuthController: Controller = [
-  {
-    pathName: '/register',
-    method: HTTPMethod.POST,
-    middlewares: [validatebody(new CreateUserDto())],
-    handler: async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const token = await AuthService.createUser(req.body);
+    return {
+      message: 'User Created',
+      token,
+    };
+  }
 
-        res.send({
-          message: 'User Created',
-          token,
-        });
-      } catch (error) {
-        next(error);
-      }
-    },
-  },
-  {
-    pathName: '/login',
-    method: HTTPMethod.POST,
-    middlewares: [validatebody(new CreateUserDto())],
-    handler: async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const token = await AuthService.logInUser(req.body);
+  @Post('/login')
+  async loginUser(@Body() user: CreateUserDto) {
+    const token = await AuthService.logInUser(user);
 
-        res.send({
-          message: 'User successfully logged in',
-          token,
-        });
-      } catch (error) {
-        next(error);
-      }
-    },
-  },
-];
+    return {
+      message: 'User successfully logged in',
+      token,
+    };
+  }
+}
 
-export default parseRoutes(baseUrl, AuthController);
+export default AuthController;
