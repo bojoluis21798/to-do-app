@@ -1,7 +1,7 @@
 import { Body, JsonController, Post } from 'routing-controllers';
 import { Service } from 'typedi';
 import AuthService from './auth.service';
-import UserDTO from './dto/create-user.dto';
+import UserDTO from './dto/user.dto';
 
 @JsonController('/auth')
 @Service()
