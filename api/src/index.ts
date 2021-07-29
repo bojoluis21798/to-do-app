@@ -7,8 +7,6 @@ import { Container } from 'typedi';
 
 import connectDb from 'db/connectDb';
 
-import AuthController from 'routes/auth/auth.controller';
-
 const app = express();
 
 app.use(
@@ -30,7 +28,7 @@ app.use(
 useContainer(Container);
 
 useExpressServer(app, {
-  controllers: [AuthController],
+  controllers: [__dirname + '/**/*.controller.ts'],
 });
 
 app.use(
