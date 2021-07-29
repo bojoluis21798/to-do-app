@@ -1,12 +1,17 @@
-import validJWT from 'middlewares/validJWT.middleware';
+import ValidJWT from 'middlewares/validJWT.middleware';
 import { Get, JsonController, UseBefore } from 'routing-controllers';
+import { Service } from 'typedi';
+import TagService from './tags.service';
 
 @JsonController('/tags')
+@Service()
 class TagController {
+  constructor(private tagService: TagService) {}
+
   @Get('/')
-  @UseBefore(validJWT)
+  @UseBefore(ValidJWT)
   async fetchTags() {
-    return `Fetch Tags: Not implemented`;
+    return this.tagService.listTags();
   }
 }
 
