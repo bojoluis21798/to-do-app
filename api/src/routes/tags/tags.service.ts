@@ -1,9 +1,13 @@
+import tagsModel from 'models/tags.model';
 import { Service } from 'typedi';
 
 @Service()
 class TagService {
-  listTags() {
-    throw new Error('Method not implemented');
+  listTags(limit: number = 10, page: number = 0) {
+    return tagsModel
+      .find()
+      .skip(limit * page)
+      .limit(limit);
   }
 }
 

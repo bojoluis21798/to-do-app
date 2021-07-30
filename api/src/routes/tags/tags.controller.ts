@@ -1,6 +1,12 @@
 import ValidJWT from 'middlewares/validJWT.middleware';
-import { Get, JsonController, UseBefore } from 'routing-controllers';
+import {
+  Get,
+  JsonController,
+  QueryParams,
+  UseBefore,
+} from 'routing-controllers';
 import { Service } from 'typedi';
+import PaginationQuery from 'types/PaginationQuery';
 import TagService from './tags.service';
 
 @JsonController('/tags')
@@ -10,8 +16,8 @@ class TagController {
 
   @Get('/')
   @UseBefore(ValidJWT)
-  async fetchTags() {
-    return this.tagService.listTags();
+  async fetchTags(@QueryParams() query: PaginationQuery) {
+    return this.tagService.listTags(query.limit, query.page);
   }
 }
 
