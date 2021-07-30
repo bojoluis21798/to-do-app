@@ -4,6 +4,7 @@ import UserDto from './dto/user.dto';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { Service } from 'typedi';
+import { nanoid } from 'nanoid';
 
 @Service()
 class AuthService {
@@ -20,7 +21,8 @@ class AuthService {
     const salt = await bcrypt.genSalt(10);
     createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
 
-    const newUser = new userModel(createUserDto);
+    const id = nanoid();
+    const newUser = new userModel({ ...createUserDto, _id: id });
     await newUser.save();
 
     const { password, ...noPass } = createUserDto;

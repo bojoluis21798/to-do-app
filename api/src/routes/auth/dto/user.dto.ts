@@ -1,7 +1,6 @@
 import { IsEmail, MinLength } from 'class-validator';
-import { User } from 'models/user.model';
 
-class UserDTO implements User {
+class UserDTO {
   @IsEmail()
   email: string;
 

@@ -13,7 +13,8 @@ class TagService {
   }
 
   async createTag(tag: TagsDTO) {
-    const newTag = new TagsModel(tag);
+    const id = nanoid();
+    const newTag = new TagsModel({ ...tag, _id: id });
     await newTag.save();
 
     return newTag.id;
