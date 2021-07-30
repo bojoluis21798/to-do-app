@@ -1,13 +1,15 @@
-import tagsModel from 'models/tags.model';
+import TagsModel from 'models/tags.model';
 import { Service } from 'typedi';
 
 @Service()
 class TagService {
   listTags(limit: number = 10, page: number = 0) {
-    return tagsModel
-      .find()
+    return TagsModel.find({})
       .skip(limit * page)
-      .limit(limit);
+      .limit(limit)
+      .lean()
+      .exec();
+  }
   }
 }
 

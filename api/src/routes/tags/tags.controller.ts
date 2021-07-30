@@ -17,7 +17,14 @@ class TagController {
   @Get('/')
   @UseBefore(ValidJWT)
   async fetchTags(@QueryParams() query: PaginationQuery) {
-    return this.tagService.listTags(query.limit, query.page);
+    const tags = await this.tagService.listTags(query.limit, query.page);
+
+    return {
+      message: 'List of tags',
+      tags,
+    };
+  }
+
   }
 }
 
