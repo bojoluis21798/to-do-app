@@ -1,4 +1,5 @@
 import TagsModel from 'models/tags.model';
+import { nanoid } from 'nanoid';
 import { Service } from 'typedi';
 import TagsDTO from './dto/tag.dto';
 
