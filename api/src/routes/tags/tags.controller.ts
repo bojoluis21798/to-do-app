@@ -1,12 +1,15 @@
 import ValidJWT from 'middlewares/validJWT.middleware';
 import {
+  Body,
   Get,
   JsonController,
+  Post,
   QueryParams,
   UseBefore,
 } from 'routing-controllers';
 import { Service } from 'typedi';
 import PaginationQuery from 'types/PaginationQuery';
+import TagsDTO from './dto/tag.dto';
 import TagService from './tags.service';
 
 @JsonController('/tags')
@@ -25,6 +28,15 @@ class TagController {
     };
   }
 
+  @Post('/')
+  @UseBefore(ValidJWT)
+  async createTag(@Body() tag: TagsDTO) {
+    const newTag = await this.tagService.createTag(tag);
+
+    return {
+      message: 'New Tag Created',
+      tag: newTag,
+    };
   }
 }
 

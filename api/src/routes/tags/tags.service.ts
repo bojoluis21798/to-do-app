@@ -1,5 +1,6 @@
 import TagsModel from 'models/tags.model';
 import { Service } from 'typedi';
+import TagsDTO from './dto/tag.dto';
 
 @Service()
 class TagService {
@@ -10,6 +11,12 @@ class TagService {
       .lean()
       .exec();
   }
+
+  async createTag(tag: TagsDTO) {
+    const newTag = new TagsModel(tag);
+    await newTag.save();
+
+    return newTag.id;
   }
 }
 
