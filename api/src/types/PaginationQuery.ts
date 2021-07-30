@@ -1,11 +1,13 @@
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 class PaginationQuery {
   @IsNumber()
+  @IsOptional()
   limit?: number;
 
   @IsNumber()
-  page?: number;
+  @IsOptional()
+  page: number;
 }
 
 export default PaginationQuery;
