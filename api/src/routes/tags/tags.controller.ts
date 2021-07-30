@@ -1,9 +1,11 @@
 import ValidJWT from 'middlewares/validJWT.middleware';
 import {
   Body,
+  Delete,
   Get,
   JsonController,
   Post,
+  QueryParam,
   QueryParams,
   UseBefore,
 } from 'routing-controllers';
@@ -36,6 +38,17 @@ class TagController {
     return {
       message: 'New Tag Created',
       tag: newTag,
+    };
+  }
+
+  @Delete('/')
+  @UseBefore(ValidJWT)
+  async deleteTag(@QueryParam('id') id: string) {
+    await this.tagService.deleteTagById(id);
+
+    return {
+      message: 'Tag Deleted',
+      tagId: id,
     };
   }
 }

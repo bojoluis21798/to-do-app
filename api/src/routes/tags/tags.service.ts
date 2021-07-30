@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import TagsModel from 'models/tags.model';
 import { nanoid } from 'nanoid';
 import { Service } from 'typedi';
@@ -19,6 +20,12 @@ class TagService {
     await newTag.save();
 
     return newTag.id;
+  }
+
+  async deleteTagById(id: string) {
+    if (!(await TagsModel.findByIdAndDelete(id).exec())) {
+      throw new createHttpError.NotFound('Tag ID Not Found');
+    }
   }
 }
 
