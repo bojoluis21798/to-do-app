@@ -1,4 +1,5 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
+import { User } from './user.model';
 export class Tags {
   @prop()
   _id: string;
@@ -6,8 +7,8 @@ export class Tags {
   name: string;
   @prop()
   color: string;
-  @prop()
-  created_by: string;
+  @prop({ ref: () => User, type: () => String })
+  created_by: Ref<User, string>;
 }
 
 export default getModelForClass(Tags);
