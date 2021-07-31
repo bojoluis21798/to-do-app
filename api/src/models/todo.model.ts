@@ -4,6 +4,8 @@ import { User } from './user.model';
 
 export class Todo {
   @prop()
+  _id: string;
+  @prop()
   name: string;
   @prop()
   date: string;
