@@ -24,12 +24,6 @@ class AuthService {
     const id = nanoid();
     const newUser = new userModel({ ...createUserDto, _id: id });
     await newUser.save();
-
-    const { password, ...noPass } = createUserDto;
-
-    const token = jwt.sign({ id: newUser._id, ...noPass }, 'jwt-secret');
-
-    return token;
   }
 
   async logInUser(loginUser: UserDto) {

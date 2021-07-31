@@ -10,11 +10,10 @@ class AuthController {
 
   @Post('/register')
   async registerUser(@Body() user: UserDTO) {
-    const token = await this.authService.createUser(user);
+    await this.authService.createUser(user);
 
     return {
       message: 'User Created',
-      token,
     };
   }
 
