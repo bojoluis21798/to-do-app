@@ -1,7 +1,6 @@
 import { IsHexColor, IsOptional, IsString } from 'class-validator';
-import TagsDTO from './tag.dto';
 
-class UpdateTagDTO implements TagsDTO {
+class UpdateTagDTO {
   @IsString()
   @IsOptional()
   name: string;
