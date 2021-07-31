@@ -5,7 +5,7 @@ export class User {
   _id: string;
   @prop()
   email: string;
-  @prop({ selectable: false })
+  @prop({ select: false })
   password: string;
 }
 
