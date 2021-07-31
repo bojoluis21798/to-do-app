@@ -6,6 +6,8 @@ export class Tags {
   name: string;
   @prop()
   color: string;
+  @prop()
+  created_by: string;
 }
 
 export default getModelForClass(Tags);

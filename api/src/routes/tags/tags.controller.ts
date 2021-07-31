@@ -1,3 +1,5 @@
+import { Response } from 'express';
+import ExtractUser from 'middlewares/extractUser.middleware';
 import ValidJWT from 'middlewares/validJWT.middleware';
 import {
   Body,
@@ -8,6 +10,7 @@ import {
   Put,
   QueryParam,
   QueryParams,
+  Res,
   UseBefore,
 } from 'routing-controllers';
 import { Service } from 'typedi';
@@ -23,8 +26,13 @@ class TagController {
   constructor(private tagService: TagService) {}
 
   @Get('/')
-  async fetchTags(@QueryParams() query: PaginationQuery) {
-    const tags = await this.tagService.listTags(query.limit, query.page);
+  @UseBefore(ExtractUser)
+  async fetchTags(@QueryParams() query: PaginationQuery, @Res() res: Response) {
+    const tags = await this.tagService.listTags(
+      res.locals.user._id,
+      query.limit,
+      query.page,
+    );
 
     return {
       message: 'List of tags',
@@ -33,8 +41,9 @@ class TagController {
   }
 
   @Post('/')
-  async createTag(@Body() tag: TagsDTO) {
-    const newTag = await this.tagService.createTag(tag);
+  @UseBefore(ExtractUser)
+  async createTag(@Body() tag: TagsDTO, @Res() res: Response) {
+    const newTag = await this.tagService.createTag(res.locals.user._id, tag);
 
     return {
       message: 'New Tag Created',
