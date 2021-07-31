@@ -5,6 +5,7 @@ import {
   Get,
   JsonController,
   Post,
+  Put,
   QueryParam,
   QueryParams,
   UseBefore,
@@ -12,6 +13,7 @@ import {
 import { Service } from 'typedi';
 import PaginationQuery from 'types/PaginationQuery';
 import TagsDTO from './dto/tag.dto';
+import UpdateTagDTO from './dto/update-tag.dto';
 import TagService from './tags.service';
 
 @JsonController('/tags')
@@ -49,6 +51,16 @@ class TagController {
     return {
       message: 'Tag Deleted',
       tagId: id,
+    };
+  }
+
+  @Put('/')
+  async updateTag(@QueryParam('id') id: string, @Body() tag: UpdateTagDTO) {
+    const updatedTag = await this.tagService.updateTag(id, tag);
+
+    return {
+      message: 'Tag Updated',
+      tagId: updatedTag,
     };
   }
 }

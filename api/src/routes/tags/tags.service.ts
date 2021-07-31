@@ -3,6 +3,7 @@ import TagsModel from 'models/tags.model';
 import { nanoid } from 'nanoid';
 import { Service } from 'typedi';
 import TagsDTO from './dto/tag.dto';
+import UpdateTagDTO from './dto/update-tag.dto';
 
 @Service()
 class TagService {
@@ -25,6 +26,16 @@ class TagService {
   async deleteTagById(id: string) {
     if (!(await TagsModel.findByIdAndDelete(id).exec())) {
       throw new createHttpError.NotFound('Tag ID Not Found');
+    }
+  }
+
+  async updateTag(id: string, tag: UpdateTagDTO) {
+    const updatedTag = await TagsModel.findByIdAndUpdate(id, tag).exec();
+
+    if (!updatedTag) {
+      throw new createHttpError.NotFound('Tag ID Not Found');
+    } else {
+      return updatedTag.toObject()._id;
     }
   }
 }
