@@ -27,15 +27,17 @@ class AuthService {
   }
 
   async logInUser(loginUser: UserDto) {
-    const existingUser = await userModel.findOne({ email: loginUser.email });
+    const existingUser = await userModel
+      .findOne({ email: loginUser.email })
+      .select('+password');
 
     if (
       existingUser &&
       (await bcrypt.compare(loginUser.password, existingUser.password))
     ) {
-      const { password, ...rest } = loginUser;
+      const { password, ...noPassword } = existingUser.toObject();
 
-      const token = jwt.sign(rest, 'jwt-secret');
+      const token = jwt.sign(noPassword, 'jwt-secret');
 
       return token;
     } else {
