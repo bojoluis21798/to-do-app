@@ -18,11 +18,11 @@ import TagService from './tags.service';
 
 @JsonController('/tags')
 @Service()
+@UseBefore(ValidJWT)
 class TagController {
   constructor(private tagService: TagService) {}
 
   @Get('/')
-  @UseBefore(ValidJWT)
   async fetchTags(@QueryParams() query: PaginationQuery) {
     const tags = await this.tagService.listTags(query.limit, query.page);
 
@@ -33,7 +33,6 @@ class TagController {
   }
 
   @Post('/')
-  @UseBefore(ValidJWT)
   async createTag(@Body() tag: TagsDTO) {
     const newTag = await this.tagService.createTag(tag);
 
@@ -44,7 +43,6 @@ class TagController {
   }
 
   @Delete('/')
-  @UseBefore(ValidJWT)
   async deleteTag(@QueryParam('id') id: string) {
     await this.tagService.deleteTagById(id);
 
