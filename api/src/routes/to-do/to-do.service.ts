@@ -9,6 +9,7 @@ import TodoDto from './dto/todo.dto';
 class TodoService {
   listTodo(created_by: string, limit: number = 10, page: number = 0) {
     return TodoModel.find({ created_by })
+      .populate('tags')
       .skip(limit * page)
       .limit(limit)
       .lean()
@@ -16,7 +17,7 @@ class TodoService {
   }
 
   async createTodo(created_by: string, todo: TodoDto) {
-    const tagExists = await TagsModel.findById(todo.tag).exec();
+    const tagExists = await TagsModel.findById(todo.tags).exec();
 
     if (!tagExists) {
       throw new createHttpError.NotFound('Tag not found');

@@ -6,7 +6,7 @@ class TodoDto {
   @IsDateString()
   date: string;
   @IsString()
-  tag: string;
+  tags: string;
 }
 
 export default TodoDto;
