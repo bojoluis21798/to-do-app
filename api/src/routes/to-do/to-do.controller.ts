@@ -60,7 +60,7 @@ class ToDoController {
   @Patch('/')
   async updateTodo(
     @QueryParam('id') id: string,
-    @Body({ validate: { skipMissingProperties: true } }) todo: TodoDto,
+    @Body({ validate: { skipMissingProperties: true } }) todo: Partial<TodoDto>,
   ) {
     const todoId = await this.toDoService.updateTodo(id, todo);
 
