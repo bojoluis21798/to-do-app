@@ -30,7 +30,7 @@ class ToDoController {
       query.page,
     );
 
-    return { message: 'List of tags', tags };
+    return { message: 'List of to do', tags };
   }
 
   @Post('/')
