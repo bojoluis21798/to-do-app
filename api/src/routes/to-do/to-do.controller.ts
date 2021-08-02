@@ -24,23 +24,23 @@ class ToDoController {
   @Get('/')
   @UseBefore(GetUserFromToken.injectToLocals('user'))
   async listTodo(@QueryParams() query: PaginationQuery, @Res() res: Response) {
-    const tags = await this.toDoService.listTodo(
+    const todos = await this.toDoService.listTodo(
       res.locals.user,
       query.limit,
       query.page,
     );
 
-    return { message: 'List of to do', tags };
+    return { message: 'List of to do', todos };
   }
 
   @Post('/')
   @UseBefore(GetUserFromToken.injectToLocals('user'))
   async createToDo(@Body() todo: TodoDto, @Res() res: Response) {
-    const tagId = await this.toDoService.createTodo(res.locals.user, todo);
+    const todoId = await this.toDoService.createTodo(res.locals.user, todo);
 
     return {
       message: 'To do created',
-      tagId,
+      todo: todoId,
     };
   }
 }
