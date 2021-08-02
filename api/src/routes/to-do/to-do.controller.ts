@@ -34,9 +34,9 @@ class ToDoController {
   }
 
   @Post('/')
-  @UseBefore(GetUserFromToken.injecToBody('user'))
-  async createToDo(@Body() todo: TodoDto) {
-    const tagId = await this.toDoService.createTodo(todo);
+  @UseBefore(GetUserFromToken.injectToLocals('user'))
+  async createToDo(@Body() todo: TodoDto, @Res() res: Response) {
+    const tagId = await this.toDoService.createTodo(res.locals.user, todo);
 
     return {
       message: 'To do created',

@@ -15,9 +15,9 @@ class TagService {
       .exec();
   }
 
-  async createTag(tag: TagsDTO) {
+  async createTag(userId: string, tag: TagsDTO) {
     const id = nanoid();
-    const newTag = new TagsModel({ ...tag, _id: id });
+    const newTag = new TagsModel({ ...tag, _id: id, user: userId });
     await newTag.save();
 
     return newTag.id;

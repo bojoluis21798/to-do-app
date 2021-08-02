@@ -5,8 +5,6 @@ class TagsDTO {
   name: string;
   @IsHexColor()
   color: string;
-  @IsString()
-  user: string;
 }
 
 export default TagsDTO;

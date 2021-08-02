@@ -41,9 +41,9 @@ class TagController {
   }
 
   @Post('/')
-  @UseBefore(GetUserFromToken.injecToBody('user'))
-  async createTag(@Body() tag: TagsDTO) {
-    const newTag = await this.tagService.createTag(tag);
+  @UseBefore(GetUserFromToken.injectToLocals('user'))
+  async createTag(@Body() tag: TagsDTO, @Res() res: Response) {
+    const newTag = await this.tagService.createTag(res.locals.user, tag);
 
     return {
       message: 'New Tag Created',

@@ -16,7 +16,7 @@ class TodoService {
       .exec();
   }
 
-  async createTodo(todo: TodoDto) {
+  async createTodo(userId: string, todo: TodoDto) {
     todo.tags.forEach(async (tag) => {
       const tagExists = await TagsModel.findById(tag).exec();
 
@@ -26,7 +26,7 @@ class TodoService {
     });
 
     const id = nanoid();
-    const newTodo = new TodoModel({ ...todo, _id: id });
+    const newTodo = new TodoModel({ ...todo, _id: id, user: userId });
 
     await newTodo.save();
 

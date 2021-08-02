@@ -9,21 +9,6 @@ interface Options {
 
 @Service()
 class GetUserFromToken {
-  static injecToBody(key: string, options?: Options) {
-    return (req: Request, res: Response, next: NextFunction) => {
-      const token = getBearerToken(req);
-      const user = jwt.decode(token);
-
-      if (options && !options.complete) {
-        req.body[key] = user && typeof user === 'object' ? user._id : user;
-      } else {
-        req.body[key] = user;
-      }
-
-      next();
-    };
-  }
-
   static injectToLocals(key: string, options?: Options) {
     return (req: Request, res: Response, next: NextFunction) => {
       const token = getBearerToken(req);
