@@ -43,7 +43,9 @@ class TagService {
     }
   }
 
-  async verifyTags(tagId: string | string[]) {
+  async verifyTags(tagId: string | string[] | undefined) {
+    if (!tagId) return true;
+
     const tags = tagId instanceof String ? [tagId] : tagId;
 
     for (let i = 0; i < tags.length; i++) {
