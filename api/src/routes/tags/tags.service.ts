@@ -33,13 +33,16 @@ class TagService {
   }
 
   async updateTag(id: string, tag: Partial<TagsDTO>) {
-    const updatedTag = await TagsModel.findByIdAndUpdate(id, tag).exec();
+    const updatedTag = await TagsModel.findByIdAndUpdate(id, tag, {
+      lean: true,
+      omitUndefined: true,
+    }).exec();
 
     if (!updatedTag) {
       throw new createHttpError.NotFound('Tag ID Not Found');
-    } else {
-      return updatedTag.toObject()._id;
     }
+
+    return updatedTag._id;
   }
 
   async verifyTags(tagId: string | string[] | undefined) {
