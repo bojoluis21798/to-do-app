@@ -8,7 +8,7 @@ export class Tags {
   @prop()
   color: string;
   @prop({ ref: () => User, type: () => String })
-  created_by: Ref<User, string>;
+  user: Ref<User, string>;
 }
 
 export default getModelForClass(Tags);

@@ -12,7 +12,7 @@ export class Todo {
   @prop({ ref: () => Tags, type: () => String })
   tags: Ref<Tags, string>[];
   @prop({ ref: () => User, type: () => String })
-  created_by: Ref<User, string>;
+  user: Ref<User, string>;
 }
 
 export default getModelForClass(Todo);
