@@ -41,35 +41,36 @@ class TagController {
 
   @Post('/')
   @UseBefore(GetUserFromToken.injectToLocals('user'))
-  async createTag(@Body() tag: TagsDTO, @Res() res: Response) {
-    const newTag = await this.tagService.createTag(res.locals.user, tag);
+  async createTag(@Body() tagDto: TagsDTO, @Res() res: Response) {
+    const tag = await this.tagService.createTag(res.locals.user, tagDto);
 
     return {
       message: 'New Tag Created',
-      tag: newTag,
+      tag,
     };
   }
 
   @Delete('/')
   async deleteTag(@QueryParam('id') id: string) {
-    const tagId = await this.tagService.deleteTagById(id);
+    const tag = await this.tagService.deleteTagById(id);
 
     return {
       message: 'Tag Deleted',
-      tagId: tagId,
+      tag,
     };
   }
 
   @Patch('/')
   async updateTag(
     @QueryParam('id') id: string,
-    @Body({ validate: { skipMissingProperties: true } }) tag: Partial<TagsDTO>,
+    @Body({ validate: { skipMissingProperties: true } })
+    tagDto: Partial<TagsDTO>,
   ) {
-    const updatedTag = await this.tagService.updateTag(id, tag);
+    const tag = await this.tagService.updateTag(id, tagDto);
 
     return {
       message: 'Tag Updated',
-      tagId: updatedTag,
+      tag,
     };
   }
 }

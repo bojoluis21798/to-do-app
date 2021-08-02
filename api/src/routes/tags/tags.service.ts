@@ -19,30 +19,31 @@ class TagService {
     const newTag = new TagsModel({ ...tag, _id: id, user: userId });
     await newTag.save();
 
-    return newTag.id;
+    return newTag.toObject();
   }
 
   async deleteTagById(id: string) {
-    const tag = await TagsModel.findByIdAndDelete(id).exec();
+    const tag = await TagsModel.findByIdAndDelete(id, { lean: true }).exec();
 
     if (!tag) {
       throw new createHttpError.NotFound('Tag ID Not Found');
     }
 
-    return tag.id;
+    return tag;
   }
 
   async updateTag(id: string, tag: Partial<TagsDTO>) {
     const updatedTag = await TagsModel.findByIdAndUpdate(id, tag, {
       lean: true,
       omitUndefined: true,
+      new: true,
     }).exec();
 
     if (!updatedTag) {
       throw new createHttpError.NotFound('Tag ID Not Found');
     }
 
-    return updatedTag._id;
+    return updatedTag;
   }
 
   async verifyTags(tagId: string | string[] | undefined) {
