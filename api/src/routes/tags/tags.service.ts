@@ -8,11 +8,11 @@ import UpdateTagDTO from './dto/update-tag.dto';
 @Service()
 class TagService {
   listTags(userId: string, limit: number = 10, page: number = 0) {
-    return TagsModel.find({ user: userId })
-      .skip(limit * page)
-      .limit(limit)
-      .lean()
-      .exec();
+    return TagsModel.find({ user: userId }, null, {
+      limit,
+      skip: limit * page,
+      lean: true,
+    }).exec();
   }
 
   async createTag(userId: string, tag: TagsDTO) {

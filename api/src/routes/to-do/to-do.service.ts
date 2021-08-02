@@ -8,12 +8,12 @@ import TodoDto from './dto/todo.dto';
 @Service()
 class TodoService {
   listTodo(userId: string, limit: number = 10, page: number = 0) {
-    return TodoModel.find({ user: userId })
-      .populate('tags')
-      .skip(limit * page)
-      .limit(limit)
-      .lean()
-      .exec();
+    return TodoModel.find({ user: userId }, null, {
+      populate: 'tags',
+      skip: limit * page,
+      limit: limit,
+      lean: true,
+    }).exec();
   }
 
   async createTodo(userId: string, todo: TodoDto) {
