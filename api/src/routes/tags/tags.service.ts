@@ -3,7 +3,6 @@ import TagsModel from 'models/tags.model';
 import { nanoid } from 'nanoid';
 import { Service } from 'typedi';
 import TagsDTO from './dto/tag.dto';
-import UpdateTagDTO from './dto/update-tag.dto';
 
 @Service()
 class TagService {
@@ -33,7 +32,7 @@ class TagService {
     return tag.id;
   }
 
-  async updateTag(id: string, tag: UpdateTagDTO) {
+  async updateTag(id: string, tag: Partial<TagsDTO>) {
     const updatedTag = await TagsModel.findByIdAndUpdate(id, tag).exec();
 
     if (!updatedTag) {

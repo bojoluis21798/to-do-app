@@ -16,7 +16,6 @@ import {
 import { Service } from 'typedi';
 import PaginationQuery from 'types/PaginationQuery';
 import TagsDTO from './dto/tag.dto';
-import UpdateTagDTO from './dto/update-tag.dto';
 import TagService from './tags.service';
 
 @JsonController('/tags')
@@ -62,7 +61,10 @@ class TagController {
   }
 
   @Patch('/')
-  async updateTag(@QueryParam('id') id: string, @Body() tag: UpdateTagDTO) {
+  async updateTag(
+    @QueryParam('id') id: string,
+    @Body({ validate: { skipMissingProperties: true } }) tag: Partial<TagsDTO>,
+  ) {
     const updatedTag = await this.tagService.updateTag(id, tag);
 
     return {
