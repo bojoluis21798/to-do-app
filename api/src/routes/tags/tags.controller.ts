@@ -7,7 +7,7 @@ import {
   Get,
   JsonController,
   Post,
-  Put,
+  Patch,
   QueryParam,
   QueryParams,
   Res,
@@ -61,7 +61,7 @@ class TagController {
     };
   }
 
-  @Put('/')
+  @Patch('/')
   async updateTag(@QueryParam('id') id: string, @Body() tag: UpdateTagDTO) {
     const updatedTag = await this.tagService.updateTag(id, tag);
 
