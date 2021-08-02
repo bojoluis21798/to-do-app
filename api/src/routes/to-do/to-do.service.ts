@@ -16,15 +16,17 @@ class TodoService {
       .exec();
   }
 
-  async createTodo(created_by: string, todo: TodoDto) {
-    const tagExists = await TagsModel.findById(todo.tags).exec();
+  async createTodo(todo: TodoDto) {
+    todo.tags.forEach(async (tag) => {
+      const tagExists = await TagsModel.findById(tag).exec();
 
-    if (!tagExists) {
-      throw new createHttpError.NotFound('Tag not found');
-    }
+      if (!tagExists) {
+        throw new createHttpError.NotFound(`Tag ${tag} not found`);
+      }
+    });
 
     const id = nanoid();
-    const newTodo = new TodoModel({ ...todo, _id: id, created_by });
+    const newTodo = new TodoModel({ ...todo, _id: id });
 
     await newTodo.save();
 
