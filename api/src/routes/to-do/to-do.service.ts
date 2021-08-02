@@ -4,7 +4,6 @@ import { nanoid } from 'nanoid';
 import TagService from 'routes/tags/tags.service';
 import { Service } from 'typedi';
 import TodoDto from './dto/todo.dto';
-import UpdateTodoDto from './dto/update-todo.dto';
 
 @Service()
 class TodoService {
@@ -39,6 +38,20 @@ class TodoService {
 
     return toDo.toObject()._id;
   }
+
+  async updateTodo(id: string, todo: Partial<TodoDto>) {
+    if (await this.tagsService.verifyTags(todo.tags)) {
+      const todoDoc = await TodoModel.findByIdAndUpdate(id, todo, {
+        lean: true,
+        omitUndefined: true,
+      }).exec();
+
+      if (!todoDoc) {
+        throw new createHttpError.NotFound('To do not found');
+      }
+
+      return todoDoc._id;
+    }
   }
 }
 

@@ -7,6 +7,7 @@ import {
   Get,
   JsonController,
   Post,
+  Patch,
   QueryParam,
   QueryParams,
   Res,
@@ -52,6 +53,19 @@ class ToDoController {
 
     return {
       message: 'To do deleted',
+      todo: todoId,
+    };
+  }
+
+  @Patch('/')
+  async updateTodo(
+    @QueryParam('id') id: string,
+    @Body({ validate: { skipMissingProperties: true } }) todo: TodoDto,
+  ) {
+    const todoId = await this.toDoService.updateTodo(id, todo);
+
+    return {
+      message: 'To do updated',
       todo: todoId,
     };
   }
