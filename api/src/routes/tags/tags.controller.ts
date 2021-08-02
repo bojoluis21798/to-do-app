@@ -53,11 +53,11 @@ class TagController {
 
   @Delete('/')
   async deleteTag(@QueryParam('id') id: string) {
-    await this.tagService.deleteTagById(id);
+    const tagId = await this.tagService.deleteTagById(id);
 
     return {
       message: 'Tag Deleted',
-      tagId: id,
+      tagId: tagId,
     };
   }
 

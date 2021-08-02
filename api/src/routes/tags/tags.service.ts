@@ -24,9 +24,13 @@ class TagService {
   }
 
   async deleteTagById(id: string) {
-    if (!(await TagsModel.findByIdAndDelete(id).exec())) {
+    const tag = await TagsModel.findByIdAndDelete(id).exec();
+
+    if (!tag) {
       throw new createHttpError.NotFound('Tag ID Not Found');
     }
+
+    return tag.id;
   }
 
   async updateTag(id: string, tag: UpdateTagDTO) {
