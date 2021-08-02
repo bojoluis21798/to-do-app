@@ -7,8 +7,8 @@ import TodoDto from './dto/todo.dto';
 
 @Service()
 class TodoService {
-  listTodo(created_by: string, limit: number = 10, page: number = 0) {
-    return TodoModel.find({ created_by })
+  listTodo(userId: string, limit: number = 10, page: number = 0) {
+    return TodoModel.find({ user: userId })
       .populate('tags')
       .skip(limit * page)
       .limit(limit)

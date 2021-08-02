@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import ExtractUser from 'middlewares/extractUser.middleware';
+import GetUserFromToken from 'middlewares/getUserFromToken.middleware';
 import ValidJWT from 'middlewares/validJWT.middleware';
 import {
   Body,
@@ -26,10 +26,10 @@ class TagController {
   constructor(private tagService: TagService) {}
 
   @Get('/')
-  @UseBefore(ExtractUser)
+  @UseBefore(GetUserFromToken.injectToLocals('user'))
   async fetchTags(@QueryParams() query: PaginationQuery, @Res() res: Response) {
     const tags = await this.tagService.listTags(
-      res.locals.user._id,
+      res.locals.user,
       query.limit,
       query.page,
     );
@@ -41,9 +41,9 @@ class TagController {
   }
 
   @Post('/')
-  @UseBefore(ExtractUser)
-  async createTag(@Body() tag: TagsDTO, @Res() res: Response) {
-    const newTag = await this.tagService.createTag(res.locals.user._id, tag);
+  @UseBefore(GetUserFromToken.injecToBody('user'))
+  async createTag(@Body() tag: TagsDTO) {
+    const newTag = await this.tagService.createTag(tag);
 
     return {
       message: 'New Tag Created',

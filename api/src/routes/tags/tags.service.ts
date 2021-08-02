@@ -7,17 +7,17 @@ import UpdateTagDTO from './dto/update-tag.dto';
 
 @Service()
 class TagService {
-  listTags(created_by: string, limit: number = 10, page: number = 0) {
-    return TagsModel.find({ created_by })
+  listTags(userId: string, limit: number = 10, page: number = 0) {
+    return TagsModel.find({ user: userId })
       .skip(limit * page)
       .limit(limit)
       .lean()
       .exec();
   }
 
-  async createTag(created_by: string, tag: TagsDTO) {
+  async createTag(tag: TagsDTO) {
     const id = nanoid();
-    const newTag = new TagsModel({ ...tag, _id: id, created_by });
+    const newTag = new TagsModel({ ...tag, _id: id });
     await newTag.save();
 
     return newTag.id;

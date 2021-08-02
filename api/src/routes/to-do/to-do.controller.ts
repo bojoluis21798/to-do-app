@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import ExtractUser from 'middlewares/extractUser.middleware';
+import GetUserFromToken from 'middlewares/getUserFromToken.middleware';
 import ValidJWT from 'middlewares/validJWT.middleware';
 import {
   Body,
@@ -22,10 +22,10 @@ class ToDoController {
   constructor(private toDoService: TodoService) {}
 
   @Get('/')
-  @UseBefore(ExtractUser)
+  @UseBefore(GetUserFromToken.injectToLocals('user'))
   async listTodo(@QueryParams() query: PaginationQuery, @Res() res: Response) {
     const tags = await this.toDoService.listTodo(
-      res.locals.user._id,
+      res.locals.user,
       query.limit,
       query.page,
     );
@@ -34,9 +34,9 @@ class ToDoController {
   }
 
   @Post('/')
-  @UseBefore(ExtractUser)
-  async createToDo(@Body() todo: TodoDto, @Res() res: Response) {
-    const tagId = await this.toDoService.createTodo(res.locals.user._id, todo);
+  @UseBefore(GetUserFromToken.injecToBody('user'))
+  async createToDo(@Body() todo: TodoDto) {
+    const tagId = await this.toDoService.createTodo(todo);
 
     return {
       message: 'To do created',
