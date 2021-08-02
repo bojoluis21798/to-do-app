@@ -42,6 +42,20 @@ class TagService {
       return updatedTag.toObject()._id;
     }
   }
+
+  async verifyTags(tagId: string | string[]) {
+    const tags = tagId instanceof String ? [tagId] : tagId;
+
+    for (let i = 0; i < tags.length; i++) {
+      const tag = await TagsModel.findById(tags[i]).exec();
+
+      if (!tag) {
+        throw new createHttpError.NotFound(`Tag ${tags[i]} not found`);
+      }
+    }
+
+    return true;
+  }
 }
 
 export default TagService;
