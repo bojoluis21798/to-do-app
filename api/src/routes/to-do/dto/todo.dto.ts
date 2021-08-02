@@ -5,10 +5,8 @@ class TodoDto {
   name: string;
   @IsDateString()
   date: string;
-  @IsString()
+  @IsString({ each: true })
   tags: string[];
-  @IsString()
-  user: string;
 }
 
 export default TodoDto;
