@@ -1,4 +1,4 @@
-import { IsDateString, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 class TodoDto {
   @IsString()
@@ -6,6 +6,7 @@ class TodoDto {
   @IsDateString()
   date: string;
   @IsString({ each: true })
+  @IsOptional()
   tags: string[];
 }
 
