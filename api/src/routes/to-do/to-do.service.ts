@@ -32,6 +32,16 @@ class TodoService {
 
     return newTodo.id;
   }
+
+  async deleteTodo(id: string) {
+    const toDo = await TodoModel.findByIdAndDelete(id).exec();
+
+    if (toDo) {
+      return toDo.toObject()._id;
+    } else {
+      throw new createHttpError.NotFound('Todo not found');
+    }
+  }
 }
 
 export default TodoService;

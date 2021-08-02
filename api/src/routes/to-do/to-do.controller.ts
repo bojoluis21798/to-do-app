@@ -3,9 +3,11 @@ import GetUserFromToken from 'middlewares/getUserFromToken.middleware';
 import ValidJWT from 'middlewares/validJWT.middleware';
 import {
   Body,
+  Delete,
   Get,
   JsonController,
   Post,
+  QueryParam,
   QueryParams,
   Res,
   UseBefore,
@@ -40,6 +42,16 @@ class ToDoController {
 
     return {
       message: 'To do created',
+      todo: todoId,
+    };
+  }
+
+  @Delete('/')
+  async deleteTodo(@QueryParam('id') id: string) {
+    const todoId = await this.toDoService.deleteTodo(id);
+
+    return {
+      message: 'To do deleted',
       todo: todoId,
     };
   }
