@@ -30,13 +30,13 @@ class TodoService {
   }
 
   async deleteTodo(id: string) {
-    const toDo = await TodoModel.findByIdAndDelete(id).exec();
+    const toDo = await TodoModel.findByIdAndDelete(id, { lean: true }).exec();
 
     if (!toDo) {
       throw new createHttpError.NotFound('Todo not found');
     }
 
-    return toDo.toObject()._id;
+    return toDo._id;
   }
 
   async updateTodo(id: string, todo: Partial<TodoDto>) {
