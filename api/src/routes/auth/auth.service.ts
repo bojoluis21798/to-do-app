@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { Service } from 'typedi';
 import { nanoid } from 'nanoid';
+import Config from 'config/Config';
 
 @Service()
 class AuthService {
@@ -37,7 +38,7 @@ class AuthService {
     ) {
       const { password, ...noPassword } = existingUser.toObject();
 
-      const token = jwt.sign(noPassword, 'jwt-secret');
+      const token = jwt.sign(noPassword, Config.JWT_SECRET);
 
       return token;
     } else {

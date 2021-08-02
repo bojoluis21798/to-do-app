@@ -1,3 +1,4 @@
+import Config from 'config/Config';
 import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
@@ -10,7 +11,7 @@ class ValidJWT implements ExpressMiddlewareInterface {
   use(req: Request, res: Response, next: NextFunction) {
     const token = getBearerToken(req);
 
-    if (token && jwt.verify(token, 'jwt-secret')) {
+    if (token && jwt.verify(token, Config.JWT_SECRET)) {
       next();
     } else {
       throw new createHttpError.Unauthorized('Invalid Token');
