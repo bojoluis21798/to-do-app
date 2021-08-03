@@ -33,6 +33,10 @@ useExpressServer(app, {
   controllers: [__dirname + '/**/*.controller.ts'],
   middlewares: [ErrorHandler],
   defaultErrorHandler: false,
+  validation: {
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  },
 });
 
 app.use(
