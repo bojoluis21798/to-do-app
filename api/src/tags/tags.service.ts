@@ -21,28 +21,35 @@ class TagService {
     return newTag.toObject();
   }
 
-  async deleteTagById(id: string) {
-    const tag = await TagsModel.findByIdAndDelete(id, { lean: true }).exec();
+  async deleteTagById(userId: string, tagId: string) {
+    const tag = await TagsModel.findById(tagId).exec();
 
     if (!tag) {
       throw new createHttpError.NotFound('Tag ID Not Found');
+    } else if (tag.user !== userId) {
+      throw new createHttpError.Forbidden('User does not own this tag');
     }
 
-    return tag;
+    const deletedTag = await tag.remove();
+    return deletedTag.toObject();
   }
 
-  async updateTag(id: string, tag: Partial<TagsDTO>) {
-    const updatedTag = await TagsModel.findByIdAndUpdate(id, tag, {
-      lean: true,
-      omitUndefined: true,
-      new: true,
-    }).exec();
+  async updateTag(userId: string, tagId: string, tagDto: Partial<TagsDTO>) {
+    const tag = await TagsModel.findById(tagId).exec();
 
-    if (!updatedTag) {
+    if (!tag) {
       throw new createHttpError.NotFound('Tag ID Not Found');
+    } else if (tag.user !== userId) {
+      throw new createHttpError.Forbidden('User does not own this tag');
     }
 
-    return updatedTag;
+    const update = tag.update(tagDto, {
+      omitUndefined: true,
+    });
+
+    await update.exec();
+
+    return update.getUpdate();
   }
 
   async verifyTags(tagId: string | string[] | undefined) {

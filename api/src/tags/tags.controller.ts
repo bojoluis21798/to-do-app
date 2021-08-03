@@ -21,11 +21,11 @@ import TagService from './tags.service';
 @JsonController('/tags')
 @Service()
 @UseBefore(ValidJWT)
+@UseBefore(GetUserFromToken.injectToLocals())
 class TagController {
   constructor(private tagService: TagService) {}
 
   @Get('/')
-  @UseBefore(GetUserFromToken.injectToLocals())
   async fetchTags(@QueryParams() query: PaginationQuery, @Res() res: Response) {
     const tags = await this.tagService.listTags(
       res.locals.user,
@@ -40,7 +40,6 @@ class TagController {
   }
 
   @Post('/')
-  @UseBefore(GetUserFromToken.injectToLocals())
   async createTag(@Body() tagDto: TagsDTO, @Res() res: Response) {
     const tag = await this.tagService.createTag(res.locals.user, tagDto);
 
@@ -51,8 +50,8 @@ class TagController {
   }
 
   @Delete('/')
-  async deleteTag(@QueryParam('id') id: string) {
-    const tag = await this.tagService.deleteTagById(id);
+  async deleteTag(@QueryParam('id') id: string, @Res() res: Response) {
+    const tag = await this.tagService.deleteTagById(res.locals.user, id);
 
     return {
       message: 'Tag Deleted',
@@ -65,8 +64,9 @@ class TagController {
     @QueryParam('id') id: string,
     @Body({ validate: { skipMissingProperties: true } })
     tagDto: Partial<TagsDTO>,
+    @Res() res: Response,
   ) {
-    const tag = await this.tagService.updateTag(id, tagDto);
+    const tag = await this.tagService.updateTag(res.locals.user, id, tagDto);
 
     return {
       message: 'Tag Updated',
