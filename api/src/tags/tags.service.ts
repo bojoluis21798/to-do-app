@@ -21,7 +21,7 @@ class TagService {
     return newTag.toObject();
   }
 
-  async deleteTagById(userId: string, tagId: string) {
+  async findTagById(userId: string, tagId: string) {
     const tag = await TagsModel.findById(tagId).exec();
 
     if (!tag) {
@@ -29,19 +29,19 @@ class TagService {
     } else if (tag.user !== userId) {
       throw new createHttpError.Forbidden('User does not own this tag');
     }
+
+    return tag;
+  }
+
+  async deleteTagById(userId: string, tagId: string) {
+    const tag = await this.findTagById(userId, tagId);
 
     const deletedTag = await tag.remove();
     return deletedTag.toObject();
   }
 
   async updateTag(userId: string, tagId: string, tagDto: Partial<TagsDTO>) {
-    const tag = await TagsModel.findById(tagId).exec();
-
-    if (!tag) {
-      throw new createHttpError.NotFound('Tag ID Not Found');
-    } else if (tag.user !== userId) {
-      throw new createHttpError.Forbidden('User does not own this tag');
-    }
+    const tag = await this.findTagById(userId, tagId);
 
     const update = tag.update(tagDto, {
       omitUndefined: true,
