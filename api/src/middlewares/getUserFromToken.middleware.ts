@@ -14,10 +14,10 @@ class GetUserFromToken {
       const token = getBearerToken(req);
       const user = jwt.decode(token);
 
-      if (options && !options.complete) {
-        res.locals[key] = user && typeof user === 'object' ? user._id : user;
-      } else {
+      if (options && options.complete) {
         res.locals[key] = user;
+      } else {
+        res.locals[key] = user && typeof user === 'object' ? user._id : user;
       }
 
       next();
