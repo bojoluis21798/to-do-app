@@ -1,8 +1,7 @@
 import createHttpError from 'http-errors';
-import TagsModel from 'tags/model/tags.model';
+import TagsModel, { TagsDTO } from 'tags/model/tags.model';
 import { nanoid } from 'nanoid';
 import { Service } from 'typedi';
-import TagsDTO from './dto/tag.dto';
 
 @Service()
 class TagService {

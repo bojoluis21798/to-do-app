@@ -15,7 +15,7 @@ import {
 } from 'routing-controllers';
 import { Service } from 'typedi';
 import PaginationQuery from 'types/PaginationQuery';
-import TagsDTO from './dto/tag.dto';
+import { TagsDTO } from './model/tags.model';
 import TagService from './tags.service';
 
 @JsonController('/tags')

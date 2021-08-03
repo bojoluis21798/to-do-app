@@ -1,18 +1,28 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { Tags } from '../../tags/model/tags.model';
-import { User } from '../../auth/model/user.model';
+import { TagsModelSchema } from '../../tags/model/tags.model';
+import { UserModelSchema } from '../../auth/model/user.model';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
-export class Todo {
+export class TodoDTO {
   @prop()
-  _id: string;
-  @prop()
+  @IsString()
   name: string;
+
   @prop()
+  @IsDateString()
   date: string;
-  @prop({ ref: () => Tags, type: () => String })
-  tags: Ref<Tags, string>[];
-  @prop({ ref: () => User, type: () => String })
-  user: Ref<User, string>;
+
+  @prop({ ref: () => TagsModelSchema, type: () => String })
+  @IsOptional()
+  @IsString({ each: true })
+  tags: string[];
 }
 
-export default getModelForClass(Todo);
+export class TodoModelSchema extends TodoDTO {
+  @prop({ required: true })
+  _id: string;
+  @prop({ ref: () => UserModelSchema, type: () => String })
+  user: Ref<UserModelSchema, string>;
+}
+
+export default getModelForClass(TodoModelSchema);

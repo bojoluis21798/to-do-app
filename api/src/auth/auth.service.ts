@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import userModel, { User } from 'auth/model/user.model';
+import userModel, { UserDTO } from 'auth/model/user.model';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { Service } from 'typedi';
@@ -13,7 +13,7 @@ class AuthService {
    * @param createUserDto
    * @returns {string} JsonWebToken
    */
-  async createUser(createUserDto: User) {
+  async createUser(createUserDto: UserDTO) {
     if (await userModel.findOne({ email: createUserDto.email })) {
       throw new createHttpError.Conflict('User email already exists');
     }
@@ -26,7 +26,7 @@ class AuthService {
     await newUser.save();
   }
 
-  async logInUser(loginUser: User) {
+  async logInUser(loginUser: UserDTO) {
     const existingUser = await userModel
       .findOne({ email: loginUser.email })
       .select('+password');

@@ -1,14 +1,22 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { User } from '../../auth/model/user.model';
-export class Tags {
+import { IsHexColor, IsString } from 'class-validator';
+import { UserModelSchema } from '../../auth/model/user.model';
+
+export class TagsDTO {
   @prop()
-  _id: string;
-  @prop()
+  @IsString()
   name: string;
+
   @prop()
+  @IsHexColor()
   color: string;
-  @prop({ ref: () => User, type: () => String })
-  user: Ref<User, string>;
 }
 
-export default getModelForClass(Tags);
+export class TagsModelSchema extends TagsDTO {
+  @prop({ required: true })
+  _id: string;
+  @prop({ ref: () => UserModelSchema, type: () => String })
+  user: Ref<UserModelSchema, string>;
+}
+
+export default getModelForClass(TagsModelSchema);

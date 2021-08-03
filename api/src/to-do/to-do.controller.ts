@@ -15,7 +15,7 @@ import {
 } from 'routing-controllers';
 import { Service } from 'typedi';
 import PaginationQuery from 'types/PaginationQuery';
-import TodoDto from './dto/todo.dto';
+import { TodoDTO } from './model/todo.model';
 import TodoService from './to-do.service';
 
 @JsonController('/to-do')
@@ -38,7 +38,7 @@ class ToDoController {
 
   @Post('/')
   @UseBefore(GetUserFromToken.injectToLocals('user'))
-  async createToDo(@Body() todo: TodoDto, @Res() res: Response) {
+  async createToDo(@Body() todo: TodoDTO, @Res() res: Response) {
     const todoId = await this.toDoService.createTodo(res.locals.user, todo);
 
     return {
@@ -60,7 +60,7 @@ class ToDoController {
   @Patch('/')
   async updateTodo(
     @QueryParam('id') id: string,
-    @Body({ validate: { skipMissingProperties: true } }) todo: Partial<TodoDto>,
+    @Body({ validate: { skipMissingProperties: true } }) todo: Partial<TodoDTO>,
   ) {
     const todoId = await this.toDoService.updateTodo(id, todo);
 

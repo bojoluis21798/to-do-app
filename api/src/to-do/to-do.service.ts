@@ -1,9 +1,8 @@
 import createHttpError from 'http-errors';
-import TodoModel from 'to-do/model/todo.model';
+import TodoModel, { TodoDTO } from 'to-do/model/todo.model';
 import { nanoid } from 'nanoid';
 import TagService from 'tags/tags.service';
 import { Service } from 'typedi';
-import TodoDto from './dto/todo.dto';
 
 @Service()
 class TodoService {
@@ -18,7 +17,7 @@ class TodoService {
     }).exec();
   }
 
-  async createTodo(userId: string, todo: TodoDto) {
+  async createTodo(userId: string, todo: TodoDTO) {
     if (await this.tagsService.verifyTags(todo.tags)) {
       const id = nanoid();
       const newTodo = new TodoModel({ ...todo, _id: id, user: userId });
@@ -39,7 +38,7 @@ class TodoService {
     return toDo._id;
   }
 
-  async updateTodo(id: string, todo: Partial<TodoDto>) {
+  async updateTodo(id: string, todo: Partial<TodoDTO>) {
     if (await this.tagsService.verifyTags(todo.tags)) {
       const todoDoc = await TodoModel.findByIdAndUpdate(id, todo, {
         lean: true,

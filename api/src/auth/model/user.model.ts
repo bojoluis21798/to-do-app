@@ -1,7 +1,7 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 
-export class User {
+export class UserDTO {
   @prop()
   @IsEmail()
   email: string;
@@ -12,9 +12,9 @@ export class User {
   password: string;
 }
 
-class UserModel extends User {
-  @prop()
+export class UserModelSchema extends UserDTO {
+  @prop({ required: true })
   _id: string;
 }
 
-export default getModelForClass(UserModel);
+export default getModelForClass(UserModelSchema);
