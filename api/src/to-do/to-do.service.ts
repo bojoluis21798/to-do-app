@@ -24,32 +24,40 @@ class TodoService {
 
       await newTodo.save();
 
-      return newTodo.id;
+      return newTodo.toObject();
     }
   }
 
-  async deleteTodo(id: string) {
-    const toDo = await TodoModel.findByIdAndDelete(id, { lean: true }).exec();
+  async findTodoById(userId: string, id: string) {
+    const toDo = await TodoModel.findById(id).exec();
 
     if (!toDo) {
       throw new createHttpError.NotFound('Todo not found');
+    } else if (toDo.user !== userId) {
+      throw new createHttpError.Forbidden('User does not own this tag');
     }
 
-    return toDo._id;
+    return toDo;
   }
 
-  async updateTodo(id: string, todo: Partial<TodoDTO>) {
-    if (await this.tagsService.verifyTags(todo.tags)) {
-      const todoDoc = await TodoModel.findByIdAndUpdate(id, todo, {
-        lean: true,
+  async deleteTodo(userId: string, id: string) {
+    const todo = await this.findTodoById(userId, id);
+
+    const removedTodo = await todo.remove();
+    return removedTodo.toObject();
+  }
+
+  async updateTodo(userId: string, todoId: string, todoDto: Partial<TodoDTO>) {
+    if (await this.tagsService.verifyTags(todoDto.tags)) {
+      const todo = await this.findTodoById(userId, todoId);
+
+      const update = todo.update(todoDto, {
         omitUndefined: true,
-      }).exec();
+      });
 
-      if (!todoDoc) {
-        throw new createHttpError.NotFound('To do not found');
-      }
+      await update.exec();
 
-      return todoDoc._id;
+      return update.getUpdate();
     }
   }
 }

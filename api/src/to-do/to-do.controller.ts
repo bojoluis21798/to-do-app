@@ -21,11 +21,11 @@ import TodoService from './to-do.service';
 @JsonController('/to-do')
 @Service()
 @UseBefore(ValidJWT)
+@UseBefore(GetUserFromToken.injectToLocals())
 class ToDoController {
   constructor(private toDoService: TodoService) {}
 
   @Get('/')
-  @UseBefore(GetUserFromToken.injectToLocals())
   async listTodo(@QueryParams() query: PaginationQuery, @Res() res: Response) {
     const todos = await this.toDoService.listTodo(
       res.locals.user,
@@ -37,19 +37,18 @@ class ToDoController {
   }
 
   @Post('/')
-  @UseBefore(GetUserFromToken.injectToLocals())
-  async createToDo(@Body() todo: TodoDTO, @Res() res: Response) {
-    const todoId = await this.toDoService.createTodo(res.locals.user, todo);
+  async createToDo(@Body() todoDto: TodoDTO, @Res() res: Response) {
+    const todo = await this.toDoService.createTodo(res.locals.user, todoDto);
 
     return {
       message: 'To do created',
-      todo: todoId,
+      todo,
     };
   }
 
   @Delete('/')
-  async deleteTodo(@QueryParam('id') id: string) {
-    const todoId = await this.toDoService.deleteTodo(id);
+  async deleteTodo(@QueryParam('id') id: string, @Res() res: Response) {
+    const todoId = await this.toDoService.deleteTodo(res.locals.user, id);
 
     return {
       message: 'To do deleted',
@@ -61,8 +60,9 @@ class ToDoController {
   async updateTodo(
     @QueryParam('id') id: string,
     @Body({ validate: { skipMissingProperties: true } }) todo: Partial<TodoDTO>,
+    @Res() res: Response,
   ) {
-    const todoId = await this.toDoService.updateTodo(id, todo);
+    const todoId = await this.toDoService.updateTodo(res.locals.user, id, todo);
 
     return {
       message: 'To do updated',
