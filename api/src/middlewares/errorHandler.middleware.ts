@@ -10,7 +10,7 @@ import { Service } from 'typedi';
 @Service()
 class ErrorHandler implements ExpressErrorMiddlewareInterface {
   error(error: any, request: Request, response: Response, next: NextFunction) {
-    console.log('Error: ' + error);
+    console.error('Error: ' + error);
     if (error instanceof HttpError) {
       response.status(error.statusCode).send(error);
     } else if ('httpCode' in error) {
