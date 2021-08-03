@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import userModel from 'models/user.model';
+import userModel from 'auth/model/user.model';
 import UserDto from './dto/user.dto';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';

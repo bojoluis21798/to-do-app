@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
-import TodoModel from 'models/todo.model';
+import TodoModel from 'to-do/model/todo.model';
 import { nanoid } from 'nanoid';
-import TagService from 'routes/tags/tags.service';
+import TagService from 'tags/tags.service';
 import { Service } from 'typedi';
 import TodoDto from './dto/todo.dto';
 

@@ -1,6 +1,6 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { Tags } from './tags.model';
-import { User } from './user.model';
+import { Tags } from '../../tags/model/tags.model';
+import { User } from '../../auth/model/user.model';
 
 export class Todo {
   @prop()

@@ -1,5 +1,5 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { User } from './user.model';
+import { User } from '../../auth/model/user.model';
 export class Tags {
   @prop()
   _id: string;
