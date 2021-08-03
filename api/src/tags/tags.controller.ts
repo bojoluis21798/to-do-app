@@ -25,7 +25,7 @@ class TagController {
   constructor(private tagService: TagService) {}
 
   @Get('/')
-  @UseBefore(GetUserFromToken.injectToLocals('user'))
+  @UseBefore(GetUserFromToken.injectToLocals())
   async fetchTags(@QueryParams() query: PaginationQuery, @Res() res: Response) {
     const tags = await this.tagService.listTags(
       res.locals.user,
@@ -40,7 +40,7 @@ class TagController {
   }
 
   @Post('/')
-  @UseBefore(GetUserFromToken.injectToLocals('user'))
+  @UseBefore(GetUserFromToken.injectToLocals())
   async createTag(@Body() tagDto: TagsDTO, @Res() res: Response) {
     const tag = await this.tagService.createTag(res.locals.user, tagDto);
 

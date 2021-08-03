@@ -9,7 +9,7 @@ interface Options {
 
 @Service()
 class GetUserFromToken {
-  static injectToLocals(key: string, options?: Options) {
+  static injectToLocals(key: string = 'user', options?: Options) {
     return (req: Request, res: Response, next: NextFunction) => {
       const token = getBearerToken(req);
       const user = jwt.decode(token);

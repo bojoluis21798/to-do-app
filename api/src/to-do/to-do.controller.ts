@@ -25,7 +25,7 @@ class ToDoController {
   constructor(private toDoService: TodoService) {}
 
   @Get('/')
-  @UseBefore(GetUserFromToken.injectToLocals('user'))
+  @UseBefore(GetUserFromToken.injectToLocals())
   async listTodo(@QueryParams() query: PaginationQuery, @Res() res: Response) {
     const todos = await this.toDoService.listTodo(
       res.locals.user,
@@ -37,7 +37,7 @@ class ToDoController {
   }
 
   @Post('/')
-  @UseBefore(GetUserFromToken.injectToLocals('user'))
+  @UseBefore(GetUserFromToken.injectToLocals())
   async createToDo(@Body() todo: TodoDTO, @Res() res: Response) {
     const todoId = await this.toDoService.createTodo(res.locals.user, todo);
 
