@@ -1,9 +1,13 @@
 import React from 'react';
-import {TextInput} from 'react-native';
+import {StyleProp, TextInput} from 'react-native';
 import styles from './SearchbarStyles';
 
-const Searchbar: React.FunctionComponent = () => {
-  return <TextInput style={styles.textInput} placeholder="Search" />;
+const Searchbar: React.FunctionComponent<{style: StyleProp<any>}> = ({
+  style,
+}) => {
+  return (
+    <TextInput style={{...style, ...styles.textInput}} placeholder="Search" />
+  );
 };
 
 export default Searchbar;
