@@ -1,14 +1,8 @@
 import React from 'react';
-import {Text, View} from 'react-native';
-import styles from './TodoStyles';
+import TodoItem from './TodoItem';
 
 const Todo: React.FunctionComponent = () => {
-  return (
-    <View style={styles.todo}>
-      <View style={styles.todoStatus} />
-      <Text>Hi</Text>
-    </View>
-  );
+  return <TodoItem />;
 };
 
 export default Todo;
