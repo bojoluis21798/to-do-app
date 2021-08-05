@@ -30,6 +30,7 @@ app.use(
 useContainer(Container);
 
 useExpressServer(app, {
+  routePrefix: '/api',
   controllers: [__dirname + '/**/*.controller.ts'],
   middlewares: [ErrorHandler],
   defaultErrorHandler: false,
