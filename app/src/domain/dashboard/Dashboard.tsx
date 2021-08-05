@@ -1,13 +1,13 @@
 import React from 'react';
-import Searchbar from './features/searchbar';
 import styles from './DashboardStyles';
 import {ScrollView} from 'react-native';
 import Todo from './features/todo/Todo';
+import Tags from './features/tags/Tags';
 
 const Dashboard: React.FunctionComponent = () => {
   return (
     <ScrollView style={styles.container}>
-      <Searchbar style={styles.searchbar} />
+      <Tags style={styles.tags} />
       <Todo />
     </ScrollView>
   );
