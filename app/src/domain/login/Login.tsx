@@ -58,9 +58,9 @@ const Login: React.FunctionComponent = () => {
             value: true,
             message: messages.isRequired,
           },
-          minLength: {
-            value: 8,
-            message: 'Must be at least 8 characters',
+          pattern: {
+            value: patterns.password,
+            message: messages.invalidPassword,
           },
         }}
         render={({field: {onChange, value}, fieldState: {invalid}}) => (
