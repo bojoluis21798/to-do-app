@@ -1,0 +1,9 @@
+import React from 'react';
+import {Text} from 'react-native';
+import styles from './ErrorTextStyles';
+
+const ErrorText: React.FunctionComponent = ({children}) => {
+  return <Text style={styles.container}>{children}</Text>;
+};
+
+export default ErrorText;

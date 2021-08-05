@@ -1,16 +1,23 @@
 import React from 'react';
-import {NativeRouter, Route} from 'react-router-native';
-import routeConfig from './routeConfig';
+import {BackButton, Route} from 'react-router-native';
 
-const Routes: React.FunctionComponent = () => {
+interface IRoute {
+  path: string;
+  screen: React.ReactNode;
+  exact?: boolean;
+}
+
+const Routes: React.FunctionComponent<{routes: IRoute[]}> = ({routes}) => {
   return (
-    <NativeRouter>
-      {routeConfig.map(route => (
-        <Route key={route.key} path={route.path}>
-          {route.screen}
-        </Route>
-      ))}
-    </NativeRouter>
+    <React.Fragment>
+      <BackButton>
+        {routes.map(route => (
+          <Route exact={route?.exact} key={route.path} path={route.path}>
+            {route.screen}
+          </Route>
+        ))}
+      </BackButton>
+    </React.Fragment>
   );
 };
 

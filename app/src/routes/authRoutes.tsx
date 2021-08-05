@@ -3,8 +3,8 @@ import Dashboard from '../domain/dashboard/Dashboard';
 
 export default [
   {
-    key: 'dashboard',
-    path: '/dashboard',
+    path: '/',
+    exact: true,
     screen: <Dashboard />,
   },
 ];

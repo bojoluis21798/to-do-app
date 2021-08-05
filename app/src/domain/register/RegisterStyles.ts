@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import Theme from '../../theme/Theme';
 import commonStyles from '../../styles/common';
 
 const styles = StyleSheet.create({
@@ -9,21 +8,17 @@ const styles = StyleSheet.create({
   },
   title: {
     ...commonStyles.title,
-    textAlign: 'center',
-    marginBottom: 20,
+    margin: 10,
   },
   input: {
     ...commonStyles.containWidth,
     marginBottom: 10,
     marginTop: 10,
   },
-  loginContainer: {
+  registerContainer: {
     ...commonStyles.containWidth,
     marginBottom: 10,
     marginTop: 10,
-  },
-  createAccount: {
-    color: Theme.darkBlue,
   },
 });
 

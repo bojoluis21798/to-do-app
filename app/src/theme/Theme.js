@@ -5,4 +5,5 @@ export default {
   blue: '#26B3D2',
   darkBlue: '#1D4E89',
   white: '#fff',
+  errorRed: '#ed4242',
 };
