@@ -1,7 +1,7 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
 import { TagsModelSchema } from '../../tags/model/tags.model';
 import { UserModelSchema } from '../../auth/model/user.model';
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class TodoDTO {
   @prop()
@@ -16,6 +16,11 @@ export class TodoDTO {
   @IsOptional()
   @IsString({ each: true })
   tags: string[];
+
+  @prop()
+  @IsOptional()
+  @IsBoolean()
+  completed: boolean;
 }
 
 export class TodoModelSchema extends TodoDTO {
