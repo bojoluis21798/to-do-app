@@ -9,7 +9,7 @@ export const FullScreen = styled.View`
 `;
 
 export const Title = styled.Text`
-  font-size: 30;
+  font-size: 30px;
   color: ${props => props.theme.darkBlue};
   font-weight: bold;
 `;
