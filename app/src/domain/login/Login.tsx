@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {Link} from 'react-router-native';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
