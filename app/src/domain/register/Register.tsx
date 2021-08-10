@@ -1,9 +1,9 @@
 import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {Text, View} from 'react-native';
 import Button from '../../components/button/Button';
 import ErrorText from '../../components/errorText/ErrorText';
 import Input from '../../components/input/Input';
+import {FullScreen, Title} from '../../styles/common';
 import messages from '../../utils/messages';
 import patterns from '../../utils/patterns';
 import styles from './RegisterStyles';
@@ -25,8 +25,8 @@ const Register: React.FunctionComponent = () => {
   const onSubmit = (data: RegisterForm) => console.log(data);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+    <FullScreen style={styles.container}>
+      <Title style={styles.title}>Sign Up</Title>
       <Controller
         control={control}
         rules={{
@@ -109,7 +109,7 @@ const Register: React.FunctionComponent = () => {
         style={styles.registerContainer}>
         Register
       </Button>
-    </View>
+    </FullScreen>
   );
 };
 
