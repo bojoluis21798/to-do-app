@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import {Link} from 'react-router-native';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
@@ -8,6 +8,7 @@ import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import patterns from '../../utils/patterns';
 import messages from '../../utils/messages';
 import ErrorText from '../../components/errorText/ErrorText';
+import {ColoredText, FullScreen, Title} from '../../styles/common';
 
 interface LoginForm {
   email: string;
@@ -24,8 +25,8 @@ const Login: React.FunctionComponent = () => {
   const onSubmit: SubmitHandler<LoginForm> = data => console.log(data);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Just a simple to do app</Text>
+    <FullScreen style={styles.container}>
+      <Title style={styles.title}>Just a simple to do app</Title>
       <Controller
         control={control}
         rules={{
@@ -84,9 +85,9 @@ const Login: React.FunctionComponent = () => {
         Login
       </Button>
       <Link to="/register" component={TouchableOpacity}>
-        <Text style={styles.createAccount}>Create an Account</Text>
+        <ColoredText>Create an Account</ColoredText>
       </Link>
-    </View>
+    </FullScreen>
   );
 };
 
