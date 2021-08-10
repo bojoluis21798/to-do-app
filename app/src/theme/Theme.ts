@@ -1,4 +1,4 @@
-export default {
+const LightTheme = {
   shadowGrey: 'rgba(0,0,0,0.3)',
   borderGrey: 'rgba(0,0,0,0.01)',
   grey: 'rgba(0,0,0,0.1)',
@@ -6,4 +6,10 @@ export default {
   darkBlue: '#1D4E89',
   white: '#fff',
   errorRed: '#ed4242',
+};
+
+export default LightTheme;
+
+export const DarkTheme = {
+  ...LightTheme,
 };
