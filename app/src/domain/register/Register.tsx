@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import Button from '../../components/button/Button';
 import ErrorText from '../../components/errorText/ErrorText';
 import Input from '../../components/input/Input';
+import {register} from '../../service/auth';
 import {FullScreen, Title} from '../../styles/common';
 import messages from '../../utils/messages';
 import patterns from '../../utils/patterns';
@@ -15,6 +16,9 @@ interface RegisterForm {
 }
 
 const Register: React.FunctionComponent = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
+
   const {
     control,
     handleSubmit,
@@ -22,7 +26,16 @@ const Register: React.FunctionComponent = () => {
     formState: {isDirty, errors},
   } = useForm<RegisterForm>();
 
-  const onSubmit = (data: RegisterForm) => console.log(data);
+  const onSubmit = async ({confirmPassword, ...payload}: RegisterForm) => {
+    try {
+      setLoading(true);
+      await register(payload);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      setError(e.message);
+    }
+  };
 
   return (
     <FullScreen style={styles.container}>
@@ -102,8 +115,9 @@ const Register: React.FunctionComponent = () => {
       {errors.confirmPassword && (
         <ErrorText>Confirm Password must match</ErrorText>
       )}
-
+      {error && <ErrorText>{error}</ErrorText>}
       <Button
+        loading={loading}
         onPress={handleSubmit(onSubmit)}
         disabled={!isDirty}
         style={styles.registerContainer}>

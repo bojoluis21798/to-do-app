@@ -1,11 +1,11 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const axiosInstance = axios.create({
+const service = axios.create({
   baseURL: 'localhost:3000/api',
 });
 
-axiosInstance.interceptors.request.use(config => {
+service.interceptors.request.use(config => {
   return (async () => {
     if (!config.headers?.Authorization) {
       try {
@@ -14,7 +14,7 @@ axiosInstance.interceptors.request.use(config => {
         config.headers = {
           Authorization: `Bearer ${token}`,
         };
-      } catch (error) {
+      } catch (e) {
         delete config.headers.Authorization;
       }
     }
@@ -22,3 +22,5 @@ axiosInstance.interceptors.request.use(config => {
     return config;
   })();
 });
+
+export default service;
