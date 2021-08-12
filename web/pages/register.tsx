@@ -54,6 +54,7 @@ const Register = () => {
           color="white"
           placeholder="Password"
           mt={5}
+          borderColor={errors?.password ? "red" : "initial"}
           {...register("password", {
             required: {
               value: true,
@@ -77,6 +78,7 @@ const Register = () => {
           color="white"
           placeholder="Confirm Password"
           mt={5}
+          borderColor={errors.confirmPassword ? "red" : "initial"}
           {...register("confirmPassword", {
             required: {
               value: true,

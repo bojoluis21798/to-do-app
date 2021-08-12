@@ -47,6 +47,7 @@ const Login = () => {
         <Input
           color="white"
           placeholder="Password"
+          borderColor={errors?.password ? "red" : "initial"}
           mt={5}
           {...register("password", {
             required: {
