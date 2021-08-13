@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@typegoose/typegoose": "^8.0.0",
+    "@types/cors": "^2.8.12",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-winston": "^4.1.0",

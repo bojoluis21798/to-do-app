@@ -4,11 +4,14 @@ import { useContainer, useExpressServer } from 'routing-controllers';
 import expressWinston from 'express-winston';
 import winston from 'winston';
 import { Container } from 'typedi';
+import cors from 'cors';
 
 import connectDb from 'db/connectDb';
 import ErrorHandler from 'middlewares/errorHandler.middleware';
 
 const app = express();
+
+app.use(cors());
 
 app.use(
   expressWinston.logger({
