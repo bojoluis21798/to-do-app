@@ -28,6 +28,18 @@ const Button: DeepPartial<ComponentStyleConfig> = {
       color: "white",
       border: "2px solid white",
     },
+    success: {
+      bg: "green.300",
+      _disabled: {
+        opacity: 1,
+        bg: "green.300",
+      },
+      _hover: {
+        opacity: 1,
+        bg: "green.300",
+      },
+      color: "white",
+    },
   },
   defaultProps: {
     variant: "blue",

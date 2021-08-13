@@ -1,15 +1,22 @@
 import {
   Text,
+  Flex,
   Input,
   Button,
   Link as CLink,
-  StatGroupProps,
+  Spinner,
+  Icon,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { Fragment } from "react";
+import { useRouter } from "next/router";
+import React, { Fragment, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { CheckIcon } from "@chakra-ui/icons";
 import Home from "../layouts/Home";
+import AuthService from "../service/auth";
+import RequestStatus from "../types/RequestStatus";
 import patterns from "../utils/patterns";
+import sleep from "../utils";
 
 type SubmitForm = {
   email: string;
@@ -25,11 +32,38 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit: SubmitHandler<SubmitForm> = (data) => console.log(data);
+  const router = useRouter();
+
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>();
+
+  const onSubmit: SubmitHandler<SubmitForm> = async ({
+    confirmPassword,
+    ...payload
+  }) => {
+    try {
+      setRequestStatus("loading");
+
+      await AuthService.register(payload);
+
+      setRequestStatus("success");
+
+      await sleep(500);
+
+      router.replace("/");
+    } catch (error) {
+      console.log(error);
+      setRequestStatus("error");
+    }
+  };
 
   return (
     <Home>
-      <Fragment>
+      <Flex
+        flexDirection="column"
+        alignItems="center"
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Input
           placeholder="Email"
           variant={errors.email && "error"}
@@ -93,13 +127,34 @@ const Register = () => {
           </Text>
         )}
 
-        <Button onClick={handleSubmit(onSubmit)} mt={5} mb={10} size="contain">
-          Register
+        <Button
+          type="submit"
+          disabled={["success", "loading"].includes(requestStatus || "")}
+          variant={requestStatus === "success" ? "success" : "blue"}
+          mt={5}
+          size="contain"
+        >
+          {requestStatus === "loading" ? (
+            <Spinner />
+          ) : requestStatus === "success" ? (
+            <Fragment>
+              <Icon as={CheckIcon} />
+            </Fragment>
+          ) : (
+            "Register"
+          )}
         </Button>
-        <Link href="/">
-          <CLink color="blue.100">{"< Back to login"}</CLink>
+        {requestStatus === "error" && (
+          <Text mt={5} variant="error">
+            Something went wrong. Please try again
+          </Text>
+        )}
+        <Link href="/" replace>
+          <CLink mt={10} color="blue.100">
+            {"< Back to login"}
+          </CLink>
         </Link>
-      </Fragment>
+      </Flex>
     </Home>
   );
 };
