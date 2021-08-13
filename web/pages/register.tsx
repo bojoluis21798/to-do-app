@@ -31,9 +31,8 @@ const Register = () => {
     <Home>
       <Fragment>
         <Input
-          color="white"
           placeholder="Email"
-          borderColor={errors?.email ? "red" : "initial"}
+          variant={errors.email && "error"}
           {...register("email", {
             required: {
               value: true,
@@ -46,15 +45,14 @@ const Register = () => {
           })}
         />
         {errors.email && (
-          <Text mt={2} color="red.300">
+          <Text mt={2} variant="error">
             {errors.email.message}
           </Text>
         )}
         <Input
-          color="white"
+          variant={errors.password && "error"}
           placeholder="Password"
           mt={5}
-          borderColor={errors?.password ? "red" : "initial"}
           {...register("password", {
             required: {
               value: true,
@@ -69,16 +67,15 @@ const Register = () => {
         />
 
         {errors.password && (
-          <Text mt={2} wordBreak="break-word" color="red.300">
+          <Text mt={2} variant="error">
             {errors.password.message}
           </Text>
         )}
 
         <Input
-          color="white"
           placeholder="Confirm Password"
           mt={5}
-          borderColor={errors.confirmPassword ? "red" : "initial"}
+          variant={errors.confirmPassword && "error"}
           {...register("confirmPassword", {
             required: {
               value: true,
@@ -89,19 +86,12 @@ const Register = () => {
         />
 
         {errors.confirmPassword && (
-          <Text mt={2} wordBreak="break-word" color="red.300">
+          <Text mt={2} variant="error">
             {errors.confirmPassword.message || "Password does not match"}
           </Text>
         )}
 
-        <Button
-          onClick={handleSubmit(onSubmit)}
-          bg="blue.300"
-          color="white"
-          mt={5}
-          mb={10}
-          w="100%"
-        >
+        <Button onClick={handleSubmit(onSubmit)} mt={5} mb={10} size="contain">
           Register
         </Button>
         <Link href="/">

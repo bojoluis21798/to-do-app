@@ -25,9 +25,8 @@ const Login = () => {
     <Home>
       <Fragment>
         <Input
-          color="white"
+          variant={errors.email && "error"}
           placeholder="Email"
-          borderColor={errors?.email ? "red" : "initial"}
           {...register("email", {
             required: {
               value: true,
@@ -39,16 +38,17 @@ const Login = () => {
             },
           })}
         />
+
         {errors.email && (
-          <Text mt={2} color="red.300">
+          <Text mt={2} variant="error">
             {errors.email.message}
           </Text>
         )}
+
         <Input
-          color="white"
-          placeholder="Password"
-          borderColor={errors?.password ? "red" : "initial"}
           mt={5}
+          variant={errors.password && "error"}
+          placeholder="Password"
           {...register("password", {
             required: {
               value: true,
@@ -63,19 +63,12 @@ const Login = () => {
         />
 
         {errors.password && (
-          <Text mt={2} wordBreak="break-word" color="red.300">
+          <Text variant="error" mt={2}>
             {errors.password.message}
           </Text>
         )}
 
-        <Button
-          onClick={handleSubmit(onSubmit)}
-          bg="blue.300"
-          color="white"
-          mt={5}
-          mb={10}
-          w="100%"
-        >
+        <Button onClick={handleSubmit(onSubmit)} mt={5} mb={10} w="100%">
           Login
         </Button>
         <Link href="/register">

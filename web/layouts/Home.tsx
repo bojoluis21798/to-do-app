@@ -16,17 +16,15 @@ const Home: React.FunctionComponent = ({ children }) => {
         justifyContent="center"
         flexBasis="30rem"
       >
-        <Text fontSize="3rem" fontWeight="medium" color="blue.100">
-          Just a simple to do app
-        </Text>
+        <Text variant="title">Just a simple to do app</Text>
       </Flex>
       <Flex alignItems="center" justifyContent="center" direction="column">
         <Flex
           flexDirection="column"
           alignItems="center"
           backgroundColor="rgba(0,0,0,0.2)"
-          p="8rem"
-          maxWidth="35rem"
+          p="5rem"
+          w="30rem"
           borderRadius={10}
         >
           {children}
