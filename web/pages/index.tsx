@@ -1,8 +1,19 @@
-import { Text, Input, Button, Link as CLink } from "@chakra-ui/react";
+import {
+  Text,
+  Input,
+  Button,
+  Link as CLink,
+  Flex,
+  Spinner,
+  Icon,
+} from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import useService from "../hooks/useService";
 import Home from "../layouts/Home";
+import AuthService from "../service/auth";
 import patterns from "../utils/patterns";
 
 type SubmitForm = {
@@ -17,13 +28,18 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit: SubmitHandler<SubmitForm> = (data) => console.log(data);
+  const { requestStatus, fetch } = useService(AuthService.login);
 
-  console.log(errors);
+  const onSubmit: SubmitHandler<SubmitForm> = (data) => fetch(data);
 
   return (
     <Home>
-      <Fragment>
+      <Flex
+        onSubmit={handleSubmit(onSubmit)}
+        flexDirection="column"
+        alignItems="center"
+        as="form"
+      >
         <Input
           variant={errors.email && "error"}
           placeholder="Email"
@@ -69,13 +85,22 @@ const Login = () => {
           </Text>
         )}
 
-        <Button onClick={handleSubmit(onSubmit)} mt={5} mb={10} w="100%">
-          Login
+        <Button type="submit" mt={5} mb={10} w="100%">
+          {requestStatus === "loading" ? (
+            <Spinner />
+          ) : requestStatus === "success" ? (
+            <Icon as={CheckIcon} />
+          ) : (
+            "Login"
+          )}
         </Button>
-        <Link href="/register">
+        {requestStatus === "error" && (
+          <Text variant="error">Something went wrong. Please try again</Text>
+        )}
+        <Link href="/register" replace>
           <CLink color="blue.100">Create an account </CLink>
         </Link>
-      </Fragment>
+      </Flex>
     </Home>
   );
 };

@@ -7,13 +7,15 @@ type AuthRequest = {
 
 class AuthService {
   static async register(payload: AuthRequest) {
-    try {
-      const { data } = await service.post("/auth/register", payload);
+    const { data } = await service.post("/auth/register", payload);
 
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    return data;
+  }
+
+  static async login(payload: AuthRequest) {
+    const { data } = await service.post("/auth/login", payload);
+
+    return data;
   }
 }
 
