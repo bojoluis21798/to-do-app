@@ -53,6 +53,7 @@ const Register = () => {
           variant={errors.password && "error"}
           placeholder="Password"
           mt={5}
+          type="password"
           {...register("password", {
             required: {
               value: true,
@@ -76,6 +77,7 @@ const Register = () => {
           placeholder="Confirm Password"
           mt={5}
           variant={errors.confirmPassword && "error"}
+          type="password"
           {...register("confirmPassword", {
             required: {
               value: true,

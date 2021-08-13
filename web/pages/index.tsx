@@ -49,6 +49,7 @@ const Login = () => {
           mt={5}
           variant={errors.password && "error"}
           placeholder="Password"
+          type="password"
           {...register("password", {
             required: {
               value: true,
