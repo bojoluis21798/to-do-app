@@ -6,6 +6,7 @@ import useService from "../../hooks/useService";
 import AuthService from "../../service/auth";
 import patterns from "../../utils/patterns";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 type SubmitForm = {
   email: string;
@@ -19,6 +20,8 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm();
 
+  const router = useRouter();
+
   const [error, setError] = useState<string>();
 
   const { requestStatus, fetch } = useService(AuthService.login);
@@ -26,6 +29,8 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<SubmitForm> = async (data) => {
     try {
       await fetch(data);
+
+      router.push("/app");
     } catch (error) {
       if (error.response.status >= 400) {
         setError(error.response.data.message);
