@@ -1,7 +1,7 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 
-const Home: React.FunctionComponent = ({ children }) => {
+const Landing: React.FunctionComponent = ({ children }) => {
   return (
     <Flex h="100vh" justifyContent={"space-around"} alignItem={"center"}>
       <Flex
@@ -27,4 +27,4 @@ const Home: React.FunctionComponent = ({ children }) => {
   );
 };
 
-export default Home;
+export default Landing;

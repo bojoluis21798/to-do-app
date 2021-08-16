@@ -1,13 +1,13 @@
-import React from "react";
-import Landing from "../domain/Landing";
+import React, { ReactElement } from "react";
+import Landing from "../domain/Landing/Layout";
 import RegisterForm from "../domain/Landing/RegisterForm";
 
 const Register = () => {
-  return (
-    <Landing>
-      <RegisterForm />
-    </Landing>
-  );
+  return <RegisterForm />;
+};
+
+Register.getLayout = (page: ReactElement) => {
+  return <Landing>{page}</Landing>;
 };
 
 export default Register;
