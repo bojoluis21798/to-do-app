@@ -14,6 +14,7 @@ const useService = (service: (payload?: any) => Promise<any>) => {
       return res;
     } catch (error) {
       setRequestStatus("error");
+      throw error;
     }
   };
 

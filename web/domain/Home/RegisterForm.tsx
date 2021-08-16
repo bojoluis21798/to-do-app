@@ -5,9 +5,8 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import AuthService from "../../service/auth";
-import RequestStatus from "../../types/RequestStatus";
-import sleep from "../../utils";
 import patterns from "../../utils/patterns";
+import useService from "../../hooks/useService";
 
 type SubmitForm = {
   email: string;
@@ -25,25 +24,24 @@ const RegisterForm = () => {
 
   const router = useRouter();
 
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>();
+  const [error, setError] = useState<string>();
+
+  const { requestStatus, fetch } = useService(AuthService.register);
 
   const onSubmit: SubmitHandler<SubmitForm> = async ({
     confirmPassword,
     ...payload
   }) => {
     try {
-      setRequestStatus("loading");
-
-      await AuthService.register(payload);
-
-      setRequestStatus("success");
-
-      await sleep(500);
+      await fetch(payload);
 
       router.replace("/");
     } catch (error) {
-      console.log(error);
-      setRequestStatus("error");
+      if (error.response.status >= 400) {
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again");
+      }
     }
   };
 
@@ -126,11 +124,7 @@ const RegisterForm = () => {
       >
         Register
       </Button>
-      {requestStatus === "error" && (
-        <Text mt={5} variant="error">
-          Something went wrong. Please try again
-        </Text>
-      )}
+      {error && <Text variant="error">{error}</Text>}
       <Link href="/" replace>
         <CLink mt={10} color="blue.100">
           {"< Back to login"}

@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import useService from "../../hooks/useService";
 import AuthService from "../../service/auth";
 import patterns from "../../utils/patterns";
+import { useState } from "react";
 
 type SubmitForm = {
   email: string;
@@ -18,9 +19,21 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm();
 
+  const [error, setError] = useState<string>();
+
   const { requestStatus, fetch } = useService(AuthService.login);
 
-  const onSubmit: SubmitHandler<SubmitForm> = (data) => fetch(data);
+  const onSubmit: SubmitHandler<SubmitForm> = async (data) => {
+    try {
+      await fetch(data);
+    } catch (error) {
+      if (error.response.status >= 400) {
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again");
+      }
+    }
+  };
 
   return (
     <Flex
@@ -74,11 +87,13 @@ const LoginForm = () => {
         </Text>
       )}
 
-      <Button status={requestStatus} type="submit" mt={5} mb={10} w="100%">
+      <Button status={requestStatus} type="submit" mt={5} mb={0} w="100%">
         Login
       </Button>
-      {requestStatus === "error" && (
-        <Text variant="error">Something went wrong. Please try again</Text>
+      {error && (
+        <Text variant="error" mb={5}>
+          {error}
+        </Text>
       )}
       <Link href="/register" replace>
         <CLink color="blue.100">Create an account </CLink>
