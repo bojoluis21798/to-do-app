@@ -1,12 +1,12 @@
 import React from "react";
-import Home from "../domain/Home";
-import LoginForm from "../domain/Home/LoginForm";
+import Landing from "../domain/Landing";
+import LoginForm from "../domain/Landing/LoginForm";
 
 const Login = () => {
   return (
-    <Home>
+    <Landing>
       <LoginForm />
-    </Home>
+    </Landing>
   );
 };
 

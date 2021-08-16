@@ -1,12 +1,12 @@
 import React from "react";
-import Home from "../domain/Home";
-import RegisterForm from "../domain/Home/RegisterForm";
+import Landing from "../domain/Landing";
+import RegisterForm from "../domain/Landing/RegisterForm";
 
 const Register = () => {
   return (
-    <Home>
+    <Landing>
       <RegisterForm />
-    </Home>
+    </Landing>
   );
 };
 
