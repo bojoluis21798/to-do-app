@@ -4,6 +4,8 @@ const Button: DeepPartial<ComponentStyleConfig> = {
   baseStyle: {
     fontWeight: "medium",
     padding: "0.5rem",
+    bg: "blue.300",
+    color: "white",
   },
   sizes: {
     contain: {
@@ -14,10 +16,6 @@ const Button: DeepPartial<ComponentStyleConfig> = {
     white: {
       bg: "white",
       color: "black",
-    },
-    blue: {
-      bg: "blue.300",
-      color: "white",
     },
     outline: {
       _hover: {
@@ -42,7 +40,7 @@ const Button: DeepPartial<ComponentStyleConfig> = {
     },
   },
   defaultProps: {
-    variant: "blue",
+    variant: "",
   },
 };
 

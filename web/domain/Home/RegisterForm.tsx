@@ -1,17 +1,9 @@
-import {
-  Text,
-  Flex,
-  Input,
-  Button,
-  Link as CLink,
-  Spinner,
-  Icon,
-} from "@chakra-ui/react";
+import { Text, Flex, Input, Link as CLink } from "@chakra-ui/react";
+import Button from "../../components/Button";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { CheckIcon } from "@chakra-ui/icons";
 import AuthService from "../../service/auth";
 import RequestStatus from "../../types/RequestStatus";
 import sleep from "../../utils";
@@ -128,19 +120,11 @@ const RegisterForm = () => {
       <Button
         type="submit"
         disabled={["success", "loading"].includes(requestStatus || "")}
-        variant={requestStatus === "success" ? "success" : "blue"}
         mt={5}
         size="contain"
+        status={requestStatus}
       >
-        {requestStatus === "loading" ? (
-          <Spinner />
-        ) : requestStatus === "success" ? (
-          <Fragment>
-            <Icon as={CheckIcon} />
-          </Fragment>
-        ) : (
-          "Register"
-        )}
+        Register
       </Button>
       {requestStatus === "error" && (
         <Text mt={5} variant="error">

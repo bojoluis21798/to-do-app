@@ -1,13 +1,6 @@
-import { CheckIcon, Icon } from "@chakra-ui/icons";
 import Link from "next/link";
-import {
-  Text,
-  Flex,
-  Input,
-  Button,
-  Spinner,
-  Link as CLink,
-} from "@chakra-ui/react";
+import { Text, Flex, Input, Link as CLink } from "@chakra-ui/react";
+import Button from "../../components/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useService from "../../hooks/useService";
 import AuthService from "../../service/auth";
@@ -81,14 +74,8 @@ const LoginForm = () => {
         </Text>
       )}
 
-      <Button type="submit" mt={5} mb={10} w="100%">
-        {requestStatus === "loading" ? (
-          <Spinner />
-        ) : requestStatus === "success" ? (
-          <Icon as={CheckIcon} />
-        ) : (
-          "Login"
-        )}
+      <Button status={requestStatus} type="submit" mt={5} mb={10} w="100%">
+        Login
       </Button>
       {requestStatus === "error" && (
         <Text variant="error">Something went wrong. Please try again</Text>
