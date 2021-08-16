@@ -1,15 +1,11 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { IsHexColor, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { UserModelSchema } from '../../auth/model/user.model';
 
 export class TagsDTO {
   @prop()
   @IsString()
   name: string;
-
-  @prop()
-  @IsHexColor()
-  color: string;
 }
 
 export class TagsModelSchema extends TagsDTO {
