@@ -30,7 +30,7 @@ const LoginForm = () => {
     try {
       await fetch(data);
 
-      router.push("/app");
+      router.push("/dashboard");
     } catch (error) {
       if (error.response.status >= 400) {
         setError(error.response.data.message);
