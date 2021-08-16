@@ -3,12 +3,7 @@ import React from "react";
 
 const Home: React.FunctionComponent = ({ children }) => {
   return (
-    <Flex
-      bg="blue.900"
-      justifyContent="space-around"
-      alignItems="center"
-      h="100vh"
-    >
+    <Flex h="100vh" justifyContent={"space-around"} alignItem={"center"}>
       <Flex
         direction="column"
         h="100%"
