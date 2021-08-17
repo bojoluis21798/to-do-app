@@ -1,9 +1,13 @@
-import { Container, Flex } from "@chakra-ui/react";
+import { Container, Flex, Spinner } from "@chakra-ui/react";
 import React from "react";
+import useFetcher from "../../hooks/useFetcher";
 import Tags from "./Tags";
 import TodoList from "./TodoList";
 
 const Dashboard = () => {
+  const { requestStatus: tagsStatus } = useFetcher("/tags");
+  const { requestStatus: toDoStatus } = useFetcher("/to-do");
+
   return (
     <Container maxW="container.lg" centerContent>
       <Flex
@@ -13,8 +17,14 @@ const Dashboard = () => {
         flexDirection="column"
         alignItems="center"
       >
-        <Tags />
-        <TodoList />
+        {[tagsStatus, toDoStatus].every((status) => status === "loading") ? (
+          <Spinner />
+        ) : (
+          <>
+            <Tags />
+            <TodoList />
+          </>
+        )}
       </Flex>
     </Container>
   );
