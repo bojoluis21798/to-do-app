@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import AuthService from "../../service/auth";
 import patterns from "../../utils/patterns";
 import useService from "../../hooks/useService";
+import service from "../../service";
 
 type SubmitForm = {
   email: string;
@@ -26,7 +26,9 @@ const RegisterForm = () => {
 
   const [error, setError] = useState<string>();
 
-  const { requestStatus, fetch } = useService(AuthService.register);
+  const { requestStatus, fetch } = useService((payload) =>
+    service.post("/auth/register", payload)
+  );
 
   const onSubmit: SubmitHandler<SubmitForm> = async ({
     confirmPassword,

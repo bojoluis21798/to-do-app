@@ -3,10 +3,10 @@ import { Text, Flex, Input, Link as CLink } from "@chakra-ui/react";
 import Button from "../../components/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useService from "../../hooks/useService";
-import AuthService from "../../service/auth";
 import patterns from "../../utils/patterns";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import service from "../../service";
 
 type SubmitForm = {
   email: string;
@@ -24,15 +24,18 @@ const LoginForm = () => {
 
   const [error, setError] = useState<string>();
 
-  const { requestStatus, fetch } = useService(AuthService.login);
+  const { requestStatus, fetch } = useService((payload) =>
+    service.post("/auth/login", payload)
+  );
 
   const onSubmit: SubmitHandler<SubmitForm> = async (data) => {
     try {
-      await fetch(data);
+      const res = await fetch(data);
 
+      sessionStorage.setItem("TOKEN", res.token);
       router.push("/dashboard");
     } catch (error) {
-      if (error.response.status >= 400) {
+      if (error?.response?.status >= 400) {
         setError(error.response.data.message);
       } else {
         setError("Something went wrong. Please try again");

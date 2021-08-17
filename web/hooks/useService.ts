@@ -1,7 +1,8 @@
+import { AxiosResponse } from "axios";
 import { useState } from "react";
 import RequestStatus from "../types/RequestStatus";
 
-const useService = (service: (payload?: any) => Promise<any>) => {
+const useService = (service: (payload?: any) => Promise<AxiosResponse>) => {
   const [requestStatus, setRequestStatus] = useState<RequestStatus>();
 
   const fetch = async (payload?: any) => {
@@ -11,7 +12,7 @@ const useService = (service: (payload?: any) => Promise<any>) => {
       const res = await service(payload);
 
       setRequestStatus("success");
-      return res;
+      return res.data;
     } catch (error) {
       setRequestStatus("error");
       throw error;
