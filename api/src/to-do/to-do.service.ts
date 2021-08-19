@@ -9,12 +9,13 @@ class TodoService {
   constructor(private tagsService: TagService) {}
 
   listTodo(userId: string, limit: number = 10, page: number = 0) {
-    return TodoModel.find({ user: userId }, null, {
-      populate: 'tags',
-      skip: limit * page,
-      limit: limit,
-      lean: true,
-    }).exec();
+    return TodoModel.find({ user: userId })
+      .sort({ date: 'asc' })
+      .populate('tags')
+      .skip(limit * page)
+      .limit(limit)
+      .lean()
+      .exec();
   }
 
   async createTodo(userId: string, todo: TodoDTO) {
