@@ -1,12 +1,13 @@
-import { Container, Flex, Spinner } from "@chakra-ui/react";
-import React from "react";
-import useFetcher from "../../hooks/useFetcher";
+import { Container, Flex } from "@chakra-ui/react";
+import React, { FunctionComponent } from "react";
+import { DashboardData } from "../../pages/dashboard";
 import Tags from "./Tags";
 import TodoList from "./TodoList";
 
-const Dashboard = () => {
-  const { requestStatus: tagsStatus } = useFetcher("/tags");
-  const { requestStatus: toDoStatus } = useFetcher("/to-do");
+const Dashboard: FunctionComponent<DashboardData> = ({
+  data: { tags, todo },
+}) => {
+  console.log(tags, todo);
 
   return (
     <Container maxW="container.lg" centerContent>
@@ -17,14 +18,10 @@ const Dashboard = () => {
         flexDirection="column"
         alignItems="center"
       >
-        {[tagsStatus, toDoStatus].every((status) => status === "loading") ? (
-          <Spinner />
-        ) : (
-          <>
-            <Tags />
-            <TodoList />
-          </>
-        )}
+        <>
+          <Tags tags={tags} />
+          <TodoList todo={todo} />
+        </>
       </Flex>
     </Container>
   );

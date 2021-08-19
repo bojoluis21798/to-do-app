@@ -1,19 +1,9 @@
 import { Grid, Flex, Button, Box } from "@chakra-ui/react";
-import React, { useState } from "react";
-import useFetcher from "../../hooks/useFetcher";
+import React, { FunctionComponent, useState } from "react";
+import { Tag } from "../../types/Tag";
 
-export type TagResponse = {
-  _id: string;
-  name: string;
-  user: string;
-  __v: number;
-};
-
-const Tags = () => {
-  const { data } = useFetcher("/tags");
+const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
-  const tags: TagResponse[] = data.tags;
 
   const toggleSelectedTag = (tagId: string) => {
     const tagIndex = selectedTags.findIndex(
@@ -34,7 +24,7 @@ const Tags = () => {
   return (
     <Grid w="100%" templateColumns="20fr 2fr">
       <Flex w="100%" overflowX="auto" ml={-5} mr={-5} pb={5}>
-        {tags.map((tag: TagResponse) => (
+        {tags.map((tag: Tag) => (
           <Box>
             <Button
               ml={3}

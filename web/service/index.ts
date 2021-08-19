@@ -1,19 +1,23 @@
 import axios from "axios";
+import { NextApiRequestCookies } from "next/dist/server/api-utils";
 
-const service = axios.create({
+const baseConfig = {
   baseURL: "http://localhost:3001/api",
-});
+  withCredentials: true,
+};
 
-service.interceptors.request.use((config) => {
-  const token = localStorage.getItem("TOKEN");
+const service = axios.create(baseConfig);
 
-  if (token && !config.headers?.Authorization) {
-    config.headers = {
-      Authorization: `Bearer ${token}`,
-    };
-  }
-
-  return config;
-});
+export const injectCookieService = (cookie?: string) =>
+  axios.create(
+    cookie
+      ? {
+          ...baseConfig,
+          headers: {
+            cookie,
+          },
+        }
+      : baseConfig
+  );
 
 export default service;

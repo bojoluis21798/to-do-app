@@ -1,28 +1,28 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Text, Checkbox, Flex, Grid, Select, Icon } from "@chakra-ui/react";
-import React from "react";
+import { Text, Flex } from "@chakra-ui/react";
+import React, { FunctionComponent } from "react";
+import { Todo } from "../../types/Todo";
+import TodoItem from "./TodoItem";
 
-const TodoList = () => {
+let lastDateUsed: string | null = null;
+
+const TodoList: FunctionComponent<{ todo: Todo[] }> = ({ todo }) => {
   return (
     <Flex w="100%" flexDirection="column" mb={10} mt={10}>
-      <Text mb={5} variant="title" fontSize="2.5rem">
-        Today
-      </Text>
-      <Grid
-        bg="white"
-        templateColumns="2fr 20fr 2fr 1fr 1fr"
-        justifyItems="center"
-        alignItems="center"
-        gridColumnGap="1rem"
-        p={5}
-        borderRadius={5}
-      >
-        <Checkbox></Checkbox>
-        <Text justifySelf="start">To do</Text>
-        <Select></Select>
-        <Icon as={EditIcon} />
-        <Icon as={DeleteIcon} />
-      </Grid>
+      {todo.map((todo) => {
+        const newDate = lastDateUsed !== todo.date;
+        if (newDate) lastDateUsed = todo.date;
+
+        return (
+          <>
+            {newDate && (
+              <Text mb={5} variant="title" fontSize="2.5rem">
+                {todo.date}
+              </Text>
+            )}
+            <TodoItem todo={todo} />
+          </>
+        );
+      })}
     </Flex>
   );
 };

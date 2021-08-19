@@ -30,9 +30,8 @@ const LoginForm = () => {
 
   const onSubmit: SubmitHandler<SubmitForm> = async (data) => {
     try {
-      const res = await fetch(data);
+      await fetch(data);
 
-      sessionStorage.setItem("TOKEN", res.token);
       router.push("/dashboard");
     } catch (error) {
       if (error?.response?.status >= 400) {
