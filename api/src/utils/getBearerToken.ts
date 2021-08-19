@@ -2,7 +2,7 @@ import { Request } from 'express';
 import createHttpError from 'http-errors';
 
 const getBearerToken = (req: Request) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const token = req.cookies?.token;
 
   if (token) {
     return token;

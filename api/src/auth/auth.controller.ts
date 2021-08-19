@@ -1,4 +1,5 @@
-import { Body, JsonController, Post } from 'routing-controllers';
+import { Response } from 'express';
+import { Body, JsonController, Post, Res } from 'routing-controllers';
 import { Service } from 'typedi';
 import AuthService from './auth.service';
 import { UserDTO } from './model/user.model';
@@ -18,12 +19,18 @@ class AuthController {
   }
 
   @Post('/login')
-  async loginUser(@Body() user: UserDTO) {
+  async loginUser(@Body() user: UserDTO, @Res() res: Response) {
     const token = await this.authService.logInUser(user);
+    // 1 Day
+    const cookieExpiration = 1000 * 60 * 60 * 24;
+
+    res.cookie('token', token, {
+      maxAge: cookieExpiration,
+      httpOnly: true,
+    });
 
     return {
       message: 'User successfully logged in',
-      token,
     };
   }
 }
