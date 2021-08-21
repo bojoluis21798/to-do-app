@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GetServerSidePropsContext } from "next";
 import { NextApiRequestCookies } from "next/dist/server/api-utils";
 
 const baseConfig = {
@@ -8,13 +9,13 @@ const baseConfig = {
 
 const service = axios.create(baseConfig);
 
-export const injectCookieService = (cookie?: string) =>
+export const injectCookieService = (ctx: GetServerSidePropsContext) =>
   axios.create(
-    cookie
+    ctx.req?.headers?.cookie
       ? {
           ...baseConfig,
           headers: {
-            cookie,
+            cookie: ctx.req.headers.cookie,
           },
         }
       : baseConfig

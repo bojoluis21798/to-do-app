@@ -1,8 +1,7 @@
 import { GetServerSideProps } from "next";
-import { BaseContext } from "next/dist/shared/lib/utils";
 import React, { FunctionComponent } from "react";
 import Dashboard from "../../domain/Dashboard";
-import { injectCookieService } from "../../service";
+import handleServerSideFetch from "../../service/handleServerSideFetch";
 import { Tag } from "../../types/Tag";
 import { Todo } from "../../types/Todo";
 
@@ -17,28 +16,24 @@ const DashboardPage: FunctionComponent<DashboardData> = ({ data }) => {
   return <Dashboard data={data} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  try {
-    const service = injectCookieService(ctx.req?.headers?.cookie);
+export const getServerSideProps: GetServerSideProps = handleServerSideFetch(
+  async (service) => {
+    try {
+      const { data: tags } = await service.get("/tags");
+      const { data: todo } = await service.get("/to-do");
 
-    const { data: tags } = await service.get("/tags");
-    const { data: todo } = await service.get("/to-do");
-
-    return {
-      props: {
-        data: {
-          tags: tags.tags,
-          todo: todo.todos,
+      return {
+        props: {
+          data: {
+            tags: tags.tags,
+            todo: todo.todos,
+          },
         },
-      },
-    };
-  } catch (e) {
-    console.log("Error occurred:", e);
-
-    return {
-      notFound: true,
-    };
+      };
+    } catch (e) {
+      throw e;
+    }
   }
-};
+);
 
 export default DashboardPage;
