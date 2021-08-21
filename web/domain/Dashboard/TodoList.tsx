@@ -4,20 +4,22 @@ import { Todo } from "../../types/Todo";
 import TodoItem from "./TodoItem";
 import dayjs from "dayjs";
 
-let lastDateUsed: string | null = null;
+let lastDateUsed: dayjs.Dayjs | null = null;
 
 const TodoList: FunctionComponent<{ todo: Todo[] }> = ({ todo }) => {
   return (
     <Flex w="100%" flexDirection="column" mb={10} mt={10}>
       {todo.map((todo) => {
-        const newDate = lastDateUsed !== todo.date;
-        if (newDate) lastDateUsed = todo.date;
+        const todoDate = dayjs.unix(parseInt(todo.date));
+
+        const newDate = !lastDateUsed?.isSame(todoDate);
+        if (newDate) lastDateUsed = todoDate;
 
         return (
           <>
             {newDate && (
               <Text mb={5} variant="title" fontSize="2.5rem">
-                {dayjs.unix(parseInt(todo.date)).format("MMM DD, YYYY")}
+                {todoDate.format("MMM DD, YYYY")}
               </Text>
             )}
             <TodoItem todo={todo} />
