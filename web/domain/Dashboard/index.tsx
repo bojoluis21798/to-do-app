@@ -1,4 +1,12 @@
-import { Container, Flex } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
+import {
+  Text,
+  Container,
+  Flex,
+  IconButton,
+  Button,
+  Icon,
+} from "@chakra-ui/react";
 import React, { FunctionComponent } from "react";
 import { DashboardData } from "../../pages/dashboard";
 import Tags from "./Tags";
