@@ -1,13 +1,20 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Text, Grid, Flex, Button, Box, Icon, Input } from "@chakra-ui/react";
+import { AddIcon, CloseIcon } from "@chakra-ui/icons";
+import {
+  Text,
+  Grid,
+  Flex,
+  Button,
+  Box,
+  Icon,
+  Input,
+  IconButton,
+} from "@chakra-ui/react";
 import React, {
-  ChangeEventHandler,
   FunctionComponent,
   KeyboardEventHandler,
   useRef,
   useState,
 } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import service from "../../service";
 import { Tag } from "../../types/Tag";
@@ -20,7 +27,15 @@ const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { fetch } = useService((payload) => service.post("/tags", payload));
+  const { fetch: postTag } = useService(
+    (payload) => service.post("/tags", payload),
+    "/tags"
+  );
+
+  const { fetch: deleteTag } = useService(
+    (id) => service.delete(`/tags?id=${id}`),
+    "/tags"
+  );
 
   const toggleSelectedTag = (tagId: string) => {
     const tagIndex = selectedTags.findIndex(
@@ -49,10 +64,18 @@ const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
       if (tags.map((tag) => tag.name).includes(inputVal)) {
         setError(true);
       } else {
-        fetch({ name: inputVal });
+        postTag({ name: inputVal });
       }
     }
   };
+
+  const handleDeleteTag = (e: React.MouseEvent, tagId: string) => {
+    e.stopPropagation();
+
+    deleteTag(tagId);
+  };
+
+  console.log(tags);
 
   return (
     <Grid w="100%" templateColumns="20fr 2fr" columnGap={2}>
@@ -65,7 +88,15 @@ const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
               variant={selectedTags.includes(tag._id) ? "" : "outline-blue"}
               onClick={() => toggleSelectedTag(tag._id)}
             >
-              {tag.name}
+              <Text>{tag.name}</Text>
+              <IconButton
+                aria-label="Close Icon"
+                variant="unstyled"
+                icon={<CloseIcon />}
+                size="xs"
+                pr={0}
+                onClick={(e) => handleDeleteTag(e, tag._id)}
+              />
             </Button>
           </Box>
         ))}

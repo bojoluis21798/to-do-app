@@ -13,7 +13,7 @@ const outlineBase = {
 const Button: DeepPartial<ComponentStyleConfig> = {
   baseStyle: {
     fontWeight: "medium",
-    padding: "0.5rem",
+    padding: "0.5rem 0",
     bg: "blue.300",
     color: "white",
     _focus: {
