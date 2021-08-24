@@ -28,7 +28,7 @@ const Dashboard: FunctionComponent<DashboardData> = ({
       >
         <>
           <Tags tags={tags} />
-          <TodoList todo={todo} />
+          <TodoList todo={todo} tags={tags} />
         </>
       </Flex>
     </Container>

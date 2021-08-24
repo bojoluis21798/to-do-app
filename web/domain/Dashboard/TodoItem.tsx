@@ -1,19 +1,14 @@
 import { EditIcon, DeleteIcon, CloseIcon } from "@chakra-ui/icons";
-import {
-  Text,
-  Grid,
-  Checkbox,
-  Select,
-  IconButton,
-  Input,
-  Icon,
-  Stack,
-} from "@chakra-ui/react";
+import { Grid, Checkbox, IconButton, Input } from "@chakra-ui/react";
 import React, { FunctionComponent, MouseEventHandler, useState } from "react";
-import SelectDropdown from "../../components/SelectDropdown";
+import SelectDropdown, { OptionsType } from "../../components/SelectDropdown";
+import { Tag } from "../../types/Tag";
 import { Todo } from "../../types/Todo";
 
-const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
+const TodoItem: FunctionComponent<{ todo: Todo; tags: Tag[] }> = ({
+  todo,
+  tags,
+}) => {
   const [selected, setSelected] = useState(false);
   const [editing, setEditing] = useState(false);
 
@@ -23,6 +18,30 @@ const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
 
     setEditing(!editing);
   };
+
+  const dropDownOptions = (() => {
+    const deletableTags = todo.tags.map((tags) => ({
+      key: tags._id,
+      value: tags.name,
+      type: OptionsType.DELETEABLE,
+    }));
+
+    if (editing) {
+      return deletableTags.concat(
+        tags
+          .filter((tag) => !todo.tags.includes(tag))
+          .map((tag) => ({
+            key: tag._id,
+            value: tag.name,
+            type: OptionsType.ADDABLE,
+          }))
+      );
+    } else {
+      return deletableTags;
+    }
+  })();
+
+  console.log(dropDownOptions);
 
   return (
     <Grid
@@ -53,8 +72,9 @@ const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
         placeholder="Show all tags"
         onClick={(e) => e.stopPropagation()}
         onDelete={(key) => console.log(key)}
-        deletable={editing}
-        options={todo.tags.map((tags) => ({ key: tags._id, value: tags.name }))}
+        onAdd={(key) => console.log(`Add ${key}`)}
+        editable={editing}
+        options={dropDownOptions}
         emptyText="No tags"
       />
       <IconButton

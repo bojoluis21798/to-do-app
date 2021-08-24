@@ -3,10 +3,14 @@ import React, { FunctionComponent } from "react";
 import { Todo } from "../../types/Todo";
 import TodoItem from "./TodoItem";
 import dayjs from "dayjs";
+import { Tag } from "../../types/Tag";
 
 let lastDateUsed: dayjs.Dayjs | null = null;
 
-const TodoList: FunctionComponent<{ todo: Todo[] }> = ({ todo }) => {
+const TodoList: FunctionComponent<{ todo: Todo[]; tags: Tag[] }> = ({
+  todo,
+  tags,
+}) => {
   return (
     <Flex w="100%" flexDirection="column" mb={10} mt={10}>
       {todo.map((todo) => {
@@ -22,7 +26,7 @@ const TodoList: FunctionComponent<{ todo: Todo[] }> = ({ todo }) => {
                 {todoDate.format("MMM DD, YYYY")}
               </Text>
             )}
-            <TodoItem todo={todo} />
+            <TodoItem todo={todo} tags={tags} />
           </>
         );
       })}
