@@ -26,7 +26,7 @@ const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
     <Grid w="100%" templateColumns="20fr 2fr 2fr" columnGap={2}>
       <Flex w="100%" overflowX="auto" ml={-3} mr={-3} pb={5}>
         {tags.map((tag: Tag) => (
-          <Box>
+          <Box key={tag._id}>
             <Button
               ml={3}
               mr={3}
