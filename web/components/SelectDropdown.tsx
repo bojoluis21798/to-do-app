@@ -67,13 +67,13 @@ const SelectDropdown: FunctionComponent<SelectDropDownType> = ({
           w="100%"
           background="white"
           position="absolute"
+          p="12px 0"
         >
           {options && options.length > 0 ? (
             options.map((option) => (
               <Grid
                 key={option.key}
-                p="4px 6px"
-                m="2px 0"
+                p="4px 10px"
                 w="100%"
                 templateColumns="2fr 1fr"
                 alignItems="center"
@@ -88,7 +88,7 @@ const SelectDropdown: FunctionComponent<SelectDropDownType> = ({
                   <IconButton
                     aria-label="Close Icon"
                     variant="unstyled"
-                    size="sm"
+                    size="xs"
                     onClick={() => onDelete && onDelete(option.key)}
                     icon={<CloseIcon />}
                   />
@@ -98,7 +98,7 @@ const SelectDropdown: FunctionComponent<SelectDropDownType> = ({
                     <IconButton
                       aria-label="Add Icon"
                       variant="unstyled"
-                      size="sm"
+                      size="xs"
                       onClick={() => onAdd && onAdd(option.key)}
                       icon={<AddIcon />}
                     />
