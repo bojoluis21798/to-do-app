@@ -1,19 +1,17 @@
 import { Text, Flex } from "@chakra-ui/react";
 import React, { FunctionComponent } from "react";
-import { Todo } from "../../types/Todo";
 import TodoItem from "./TodoItem";
 import dayjs from "dayjs";
-import { Tag } from "../../types/Tag";
+import useTodo from "../../hooks/data/useTodo";
 
 let lastDateUsed: dayjs.Dayjs | null = null;
 
-const TodoList: FunctionComponent<{ todo: Todo[]; tags: Tag[] }> = ({
-  todo,
-  tags,
-}) => {
+const TodoList: FunctionComponent = () => {
+  const { todos } = useTodo();
+
   return (
     <Flex w="100%" flexDirection="column" mb={10} mt={10}>
-      {todo.map((todo) => {
+      {todos.map((todo) => {
         const todoDate = dayjs.unix(parseInt(todo.date));
 
         const newDate = !lastDateUsed?.isSame(todoDate);
@@ -26,7 +24,7 @@ const TodoList: FunctionComponent<{ todo: Todo[]; tags: Tag[] }> = ({
                 {todoDate.format("MMM DD, YYYY")}
               </Text>
             )}
-            <TodoItem todo={todo} tags={tags} />
+            <TodoItem todo={todo} />
           </>
         );
       })}

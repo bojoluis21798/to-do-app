@@ -15,27 +15,18 @@ import React, {
   useRef,
   useState,
 } from "react";
-import useService from "../../hooks/useService";
-import service from "../../service";
+import useTags from "../../hooks/data/useTags";
 import { Tag } from "../../types/Tag";
 
-const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
+const Tags: FunctionComponent = () => {
+  const { tags, createTag, deleteTag } = useTags();
+
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState(false);
 
   const [error, setError] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const { fetch: postTag } = useService(
-    (payload) => service.post("/tags", payload),
-    "/tags"
-  );
-
-  const { fetch: deleteTag } = useService(
-    (id) => service.delete(`/tags?id=${id}`),
-    "/tags"
-  );
 
   const toggleSelectedTag = (tagId: string) => {
     const tagIndex = selectedTags.findIndex(
@@ -64,7 +55,9 @@ const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
       if (tags.map((tag) => tag.name).includes(inputVal)) {
         setError(true);
       } else {
-        postTag({ name: inputVal });
+        const newTag = { name: inputVal };
+
+        createTag(newTag);
       }
     }
   };
@@ -74,8 +67,6 @@ const Tags: FunctionComponent<{ tags: Tag[] }> = ({ tags }) => {
 
     deleteTag(tagId);
   };
-
-  console.log(tags);
 
   return (
     <Grid w="100%" templateColumns="20fr 2fr" columnGap={2}>

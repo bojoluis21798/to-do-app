@@ -1,22 +1,9 @@
-import { AddIcon } from "@chakra-ui/icons";
-import {
-  Text,
-  Container,
-  Flex,
-  IconButton,
-  Button,
-  Icon,
-} from "@chakra-ui/react";
-import React, { FunctionComponent } from "react";
-import { DashboardData } from "../../pages/dashboard";
+import { Container, Flex } from "@chakra-ui/react";
+import React from "react";
 import Tags from "./Tags";
 import TodoList from "./TodoList";
 
-const Dashboard: FunctionComponent<DashboardData> = ({
-  data: { tags, todo },
-}) => {
-  console.log(tags, todo);
-
+const Dashboard = () => {
   return (
     <Container maxW="container.lg" centerContent>
       <Flex
@@ -27,8 +14,8 @@ const Dashboard: FunctionComponent<DashboardData> = ({
         alignItems="center"
       >
         <>
-          <Tags tags={tags} />
-          <TodoList todo={todo} tags={tags} />
+          <Tags />
+          <TodoList />
         </>
       </Flex>
     </Container>

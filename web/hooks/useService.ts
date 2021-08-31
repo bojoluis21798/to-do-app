@@ -1,31 +1,25 @@
 import { AxiosResponse } from "axios";
 import { useState } from "react";
-import RequestStatus from "../types/RequestStatus";
-import { mutate } from "swr";
 
-const useService = (
-  service: (payload?: any) => Promise<AxiosResponse>,
-  mutateSWRKey?: string
-) => {
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>();
+const useService = (service: (payload?: any) => Promise<AxiosResponse>) => {
+  const [isLoading, setIsLoading] = useState<boolean>();
+  const [error, setError] = useState();
 
   const fetch = async (payload?: any) => {
     try {
-      setRequestStatus("loading");
+      setIsLoading(true);
 
       const res = await service(payload);
 
-      if (mutateSWRKey) mutate(mutateSWRKey);
-
-      setRequestStatus("success");
+      setIsLoading(false);
       return res.data;
     } catch (error) {
-      setRequestStatus("error");
-      throw error;
+      setIsLoading(false);
+      setError(error);
     }
   };
 
-  return { fetch, requestStatus };
+  return { fetch, isLoading, error };
 };
 
 export default useService;

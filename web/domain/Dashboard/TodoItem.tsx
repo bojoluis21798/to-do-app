@@ -1,78 +1,64 @@
 import { EditIcon, DeleteIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { Grid, Checkbox, IconButton, Input } from "@chakra-ui/react";
 import React, { FunctionComponent, MouseEventHandler, useState } from "react";
-import SelectDropdown, { OptionsType } from "../../components/SelectDropdown";
-import { Tag } from "../../types/Tag";
+import SelectDropdown, {
+  OptionsType,
+  SelectOption,
+} from "../../components/SelectDropdown";
 import { Todo } from "../../types/Todo";
 import _ from "lodash";
-import useService from "../../hooks/useService";
-import service from "../../service";
+import useTodo from "../../hooks/data/useTodo";
+import useTags from "../../hooks/data/useTags";
 
-const getInitTagState = (todo: Todo, tags: Tag[]) =>
-  todo.tags
-    .map((tags) => ({
-      key: tags._id,
-      value: tags.name,
-      type: OptionsType.DELETEABLE,
-    }))
-    .concat(
-      tags
-        .filter((tag) => !todo.tags.map((tag) => tag._id).includes(tag._id))
-        .map((tag) => ({
-          key: tag._id,
-          value: tag.name,
-          type: OptionsType.ADDABLE,
-        }))
-    );
+const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
+  const { addTagtoTodo, deleteTagFromTodo, changeTodoName, submitEdits } =
+    useTodo();
+  const { tags } = useTags();
 
-const TodoItem: FunctionComponent<{ todo: Todo; tags: Tag[] }> = ({
-  todo,
-  tags,
-}) => {
   const [selected, setSelected] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  const [todoName, setTodoName] = useState(todo.name);
-  const [tagState, setTagState] = useState(getInitTagState(todo, tags));
+  const onAddTag = (newTag: SelectOption) => {
+    const tag = tags.find((tag) => tag._id === newTag.key);
 
-  const { fetch } = useService((payload) =>
-    service.patch(`to-do?id=${todo._id}`, payload)
-  );
-
-  const onAddTag = (key: string) => {
-    setTagState((tagState) =>
-      tagState.map((tag) =>
-        tag.key === key ? { ...tag, type: OptionsType.DELETEABLE } : tag
-      )
-    );
+    if (tag) addTagtoTodo(todo._id, tag);
   };
 
-  const onDeleteTag = (key: string) => {
-    setTagState((tagState) =>
-      tagState.map((tag) =>
-        tag.key === key ? { ...tag, type: OptionsType.ADDABLE } : tag
-      )
-    );
+  const onDeleteTag = (tagToDelete: SelectOption) => {
+    const tag = tags.find((tag) => tagToDelete.key === tag._id);
+
+    if (tag) deleteTagFromTodo(todo._id, tag._id);
   };
 
-  const submitEdits = () =>
-    fetch({
-      name: todoName,
-      tags: tagState
-        .filter((tag) => tag.type === OptionsType.DELETEABLE)
-        .map((tag) => tag.key),
-    });
+  const handleTodoNameChange = (name: string) => changeTodoName(todo._id, name);
 
   const toggleEdit: MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (editing) {
-      submitEdits();
+      submitEdits(todo._id);
     }
 
     setEditing((editing) => !editing);
   };
+
+  const tagOptions = [
+    ...todo.tags.map((tag) => ({
+      key: tag._id,
+      value: tag.name,
+      type: OptionsType.DELETEABLE,
+    })),
+    ...(editing
+      ? tags
+          .filter((tag) => !todo.tags.map((tag) => tag._id).includes(tag._id))
+          .map((tag) => ({
+            key: tag._id,
+            value: tag.name,
+            type: OptionsType.ADDABLE,
+          }))
+      : []),
+  ];
 
   return (
     <Grid
@@ -96,8 +82,8 @@ const TodoItem: FunctionComponent<{ todo: Todo; tags: Tag[] }> = ({
       <Input
         color="black"
         variant={editing ? "flushed" : "unstyled"}
-        value={todoName}
-        onChange={(e) => setTodoName(e.target.value)}
+        value={todo.name}
+        onChange={(e) => handleTodoNameChange(e.target.value)}
         onClick={(e) => e.stopPropagation()}
         disabled={!editing}
       />
@@ -108,11 +94,7 @@ const TodoItem: FunctionComponent<{ todo: Todo; tags: Tag[] }> = ({
         onDelete={onDeleteTag}
         onAdd={onAddTag}
         editable={editing}
-        options={
-          editing
-            ? tagState
-            : tagState.filter((tag) => tag.type === OptionsType.DELETEABLE)
-        }
+        options={tagOptions}
         emptyText="No tags"
       />
 

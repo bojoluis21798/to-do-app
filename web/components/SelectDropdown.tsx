@@ -15,15 +15,17 @@ export enum OptionsType {
   DELETEABLE = "deletable",
 }
 
+export type SelectOption = {
+  key: string;
+  value: string | number;
+  type: OptionsType;
+};
+
 export type SelectDropDownType = {
-  options?: {
-    key: string;
-    value: string | number;
-    type: OptionsType;
-  }[];
+  options?: SelectOption[];
   onClick?: MouseEventHandler;
-  onDelete?: (key: string) => void;
-  onAdd?: (key: string) => void;
+  onDelete?: (option: SelectOption) => void;
+  onAdd?: (option: SelectOption) => void;
   editable?: boolean;
   placeholder?: string;
   emptyText?: string;
@@ -89,7 +91,7 @@ const SelectDropdown: FunctionComponent<SelectDropDownType> = ({
                     aria-label="Close Icon"
                     variant="unstyled"
                     size="xs"
-                    onClick={() => onDelete && onDelete(option.key)}
+                    onClick={() => onDelete && onDelete(option)}
                     icon={<CloseIcon />}
                   />
                 ) : (
@@ -99,7 +101,7 @@ const SelectDropdown: FunctionComponent<SelectDropDownType> = ({
                       aria-label="Add Icon"
                       variant="unstyled"
                       size="xs"
-                      onClick={() => onAdd && onAdd(option.key)}
+                      onClick={() => onAdd && onAdd(option)}
                       icon={<AddIcon />}
                     />
                   )

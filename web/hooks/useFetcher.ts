@@ -1,20 +1,19 @@
-import useSWR from "swr";
+import { AxiosError } from "axios";
+import useSWR, { SWRConfiguration } from "swr";
 import service from "../service";
-import RequestStatus from "../types/RequestStatus";
 
 const fetcher = (url: string) => service.get(url).then((res) => res.data);
 
-const useFetcher = (url: string) => {
-  const { data, error } = useSWR(url, fetcher);
+type UseFetcher = <T>(
+  url: string,
+  options?: SWRConfiguration
+) => { isLoading: boolean; data: T; error: AxiosError };
 
-  const requestStatus: RequestStatus = (() => {
-    if (!data && !error) return "loading";
-    else if (data) return "success";
-    else if (error) return "error";
-  })();
+const useFetcher: UseFetcher = (url, options) => {
+  const { data, error } = useSWR(url, fetcher, options);
 
   return {
-    requestStatus,
+    isLoading: !data && !error,
     data,
     error,
   };
