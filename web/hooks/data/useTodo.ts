@@ -33,9 +33,16 @@ const useTodo = () => {
     service.post(url, payload)
   );
 
-  const isLoading = [fetchLoading, editLoading, createLoading].some(
-    (loading) => loading
+  const { fetch: deleteById, isLoading: deleteLoading } = useService((id) =>
+    service.delete(`${url}?id=${id}`)
   );
+
+  const isLoading = [
+    fetchLoading,
+    deleteLoading,
+    editLoading,
+    createLoading,
+  ].some((loading) => loading);
 
   const revalidate = () => mutate(url);
 
@@ -130,7 +137,19 @@ const useTodo = () => {
       false
     );
 
-    await create(newTodo);
+    await create({ ...newTodo, tags: newTodo.tags.map((tag) => tag._id) });
+
+    revalidate();
+  };
+
+  const deleteTodo = async (todoId: string) => {
+    await mutate(
+      url,
+      { ...data, todos: data?.todos.filter((todo) => todo._id !== todoId) },
+      false
+    );
+
+    await deleteById(todoId);
 
     revalidate();
   };
@@ -145,6 +164,7 @@ const useTodo = () => {
     setCompletion,
     submitEdits,
     createTodo,
+    deleteTodo,
     revalidate,
   };
 };

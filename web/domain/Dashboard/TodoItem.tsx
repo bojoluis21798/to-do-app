@@ -40,6 +40,7 @@ const TodoItem: FunctionComponent<TodoItemProps> = ({
   const {
     addTagtoTodo,
     createTodo,
+    deleteTodo,
     deleteTagFromTodo,
     changeTodoName,
     submitEdits,
@@ -103,6 +104,16 @@ const TodoItem: FunctionComponent<TodoItemProps> = ({
     if (isNewTodo)
       setNewTodoFieldState((todo) => ({ ...todo, completed: !todo.completed }));
     else setCompletion(todo._id, !todo.completed);
+  };
+
+  const handleDeleteTodo: MouseEventHandler = (e) => {
+    e.stopPropagation();
+
+    if (isNewTodo) {
+      if (onNewTodoSubmit) onNewTodoSubmit();
+    } else {
+      deleteTodo(todo._id);
+    }
   };
 
   const tagOptions = [
@@ -171,6 +182,7 @@ const TodoItem: FunctionComponent<TodoItemProps> = ({
         variant="unstyled"
         aria-label="Delete Icon"
         icon={<DeleteIcon />}
+        onClick={handleDeleteTodo}
       />
     </Grid>
   );
