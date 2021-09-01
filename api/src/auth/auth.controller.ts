@@ -1,5 +1,13 @@
 import { Response } from 'express';
-import { Body, JsonController, Post, Res } from 'routing-controllers';
+import ValidJWT from 'middlewares/validJWT.middleware';
+import {
+  Body,
+  Get,
+  JsonController,
+  Post,
+  Res,
+  UseBefore,
+} from 'routing-controllers';
 import { Service } from 'typedi';
 import AuthService from './auth.service';
 import { UserDTO } from './model/user.model';
@@ -31,6 +39,14 @@ class AuthController {
 
     return {
       message: 'User successfully logged in',
+    };
+  }
+
+  @Get('/check-session')
+  @UseBefore(ValidJWT)
+  async checkCookie() {
+    return {
+      message: 'Valid cookie',
     };
   }
 }

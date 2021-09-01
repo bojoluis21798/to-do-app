@@ -1,5 +1,5 @@
 import { EditIcon, DeleteIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import { Grid, Checkbox, IconButton, Input } from "@chakra-ui/react";
+import { Grid, Checkbox, IconButton, Input, Box } from "@chakra-ui/react";
 import React, { FunctionComponent, MouseEventHandler, useState } from "react";
 import SelectDropdown, {
   OptionsType,
@@ -11,11 +11,15 @@ import useTodo from "../../hooks/data/useTodo";
 import useTags from "../../hooks/data/useTags";
 
 const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
-  const { addTagtoTodo, deleteTagFromTodo, changeTodoName, submitEdits } =
-    useTodo();
+  const {
+    addTagtoTodo,
+    deleteTagFromTodo,
+    changeTodoName,
+    submitEdits,
+    setCompletion,
+  } = useTodo();
   const { tags } = useTags();
 
-  const [selected, setSelected] = useState(false);
   const [editing, setEditing] = useState(false);
 
   const onAddTag = (newTag: SelectOption) => {
@@ -70,13 +74,15 @@ const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
       p={5}
       borderRadius={5}
       cursor="pointer"
-      onClick={() => setSelected((selected) => !selected)}
+      onClick={() => {
+        setCompletion(todo._id, !todo.completed);
+      }}
     >
       <Checkbox
-        isChecked={selected}
-        onChange={() => {
-          setSelected((selected) => !selected);
-        }}
+        variant="readonly"
+        isDisabled
+        isChecked={todo.completed}
+        as="div"
       />
 
       <Input

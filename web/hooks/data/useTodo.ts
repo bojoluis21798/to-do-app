@@ -1,4 +1,5 @@
 import { mutate } from "swr";
+import todoModel from "../../../api/src/to-do/model/todo.model";
 import service from "../../service";
 import endpointUrls from "../../service/endpointUrls";
 import { Tag } from "../../types/Tag";
@@ -76,6 +77,28 @@ const useTodo = () => {
     );
   };
 
+  const setCompletion = async (todoId: string, isComplete: boolean) => {
+    await mutate(
+      url,
+      {
+        ...data,
+        todos: todos.map((todo) =>
+          todo._id === todoId ? { ...todo, completed: isComplete } : todo
+        ),
+      },
+      false
+    );
+
+    await edit({
+      id: todoId,
+      payload: {
+        completed: isComplete,
+      },
+    });
+
+    mutate(url);
+  };
+
   const submitEdits = async (todoId: string) => {
     const todo = todos.find((todo) => todo._id === todoId);
 
@@ -99,6 +122,7 @@ const useTodo = () => {
     addTagtoTodo,
     deleteTagFromTodo,
     changeTodoName,
+    setCompletion,
     submitEdits,
     revalidate,
   };
