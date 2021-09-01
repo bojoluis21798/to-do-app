@@ -70,6 +70,7 @@ const SelectDropdown: FunctionComponent<SelectDropDownType> = ({
           background="white"
           position="absolute"
           p="12px 0"
+          zIndex="1"
         >
           {options && options.length > 0 ? (
             options.map((option) => (

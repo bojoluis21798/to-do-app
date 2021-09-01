@@ -18,10 +18,19 @@ import React, {
 import useTags from "../../hooks/data/useTags";
 import { Tag } from "../../types/Tag";
 
-const Tags: FunctionComponent = () => {
+type TagsProps = {
+  onSelectTag: (newSelectedTags: string[]) => void;
+  selectedTags: string[];
+  onNewTodo: () => void;
+};
+
+const Tags: FunctionComponent<TagsProps> = ({
+  onSelectTag,
+  selectedTags,
+  onNewTodo,
+}) => {
   const { tags, createTag, deleteTag } = useTags();
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState(false);
 
   const [error, setError] = useState(false);
@@ -41,7 +50,7 @@ const Tags: FunctionComponent = () => {
       newSelectedTags.push(tagId);
     }
 
-    setSelectedTags(newSelectedTags);
+    onSelectTag(newSelectedTags);
   };
 
   const submitNewTag: KeyboardEventHandler = (e) => {
@@ -111,7 +120,7 @@ const Tags: FunctionComponent = () => {
         )}
       </Flex>
       <Box>
-        <Button aria-label="Add Icon">
+        <Button aria-label="Add Icon" onClick={() => onNewTodo()}>
           <Icon mr={2} as={AddIcon} />
           <Text>Add Todo</Text>
         </Button>

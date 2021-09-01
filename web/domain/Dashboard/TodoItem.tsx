@@ -9,42 +9,100 @@ import { Todo } from "../../types/Todo";
 import _ from "lodash";
 import useTodo from "../../hooks/data/useTodo";
 import useTags from "../../hooks/data/useTags";
+import dayjs from "dayjs";
 
-const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
+type TodoItemProps = {
+  todo?: Todo;
+  newTodo?: boolean;
+  onNewTodoSubmit?: () => void;
+};
+
+const newTodoFields = {
+  _id: "new",
+  name: "",
+  tags: [],
+  completed: false,
+  date: dayjs().format(),
+};
+
+const TodoItem: FunctionComponent<TodoItemProps> = ({
+  todo: initTodo,
+  newTodo = false,
+  onNewTodoSubmit,
+}) => {
+  const isNewTodo = !initTodo || newTodo;
+
+  const [newTodoFieldsState, setNewTodoFieldState] =
+    useState<Pick<Todo, Exclude<keyof Todo, "user">>>(newTodoFields);
+
+  const todo = !initTodo || newTodo ? newTodoFieldsState : initTodo;
+
   const {
     addTagtoTodo,
+    createTodo,
     deleteTagFromTodo,
     changeTodoName,
     submitEdits,
     setCompletion,
   } = useTodo();
+
   const { tags } = useTags();
 
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(newTodo);
 
   const onAddTag = (newTag: SelectOption) => {
     const tag = tags.find((tag) => tag._id === newTag.key);
 
-    if (tag) addTagtoTodo(todo._id, tag);
+    if (!tag) return;
+
+    if (isNewTodo) {
+      setNewTodoFieldState((todo) => ({ ...todo, tags: [...todo.tags, tag] }));
+    } else {
+      addTagtoTodo(todo._id, tag);
+    }
   };
 
   const onDeleteTag = (tagToDelete: SelectOption) => {
     const tag = tags.find((tag) => tagToDelete.key === tag._id);
 
-    if (tag) deleteTagFromTodo(todo._id, tag._id);
+    if (!tag) return;
+
+    if (isNewTodo) {
+      setNewTodoFieldState((todo) => ({
+        ...todo,
+        tags: todo.tags.filter((t) => t._id !== tag._id),
+      }));
+    } else {
+      deleteTagFromTodo(todo._id, tag._id);
+    }
   };
 
-  const handleTodoNameChange = (name: string) => changeTodoName(todo._id, name);
+  const handleTodoNameChange = (name: string) =>
+    isNewTodo
+      ? setNewTodoFieldState((todo) => ({ ...todo, name }))
+      : changeTodoName(todo._id, name);
 
   const toggleEdit: MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (editing) {
-      submitEdits(todo._id);
+      if (!isNewTodo) submitEdits(todo._id);
+      else {
+        const { _id, ...payload } = todo;
+        createTodo(payload);
+
+        if (onNewTodoSubmit) onNewTodoSubmit();
+      }
     }
 
     setEditing((editing) => !editing);
+  };
+
+  const handleCompletion = () => {
+    if (isNewTodo)
+      setNewTodoFieldState((todo) => ({ ...todo, completed: !todo.completed }));
+    else setCompletion(todo._id, !todo.completed);
   };
 
   const tagOptions = [
@@ -74,9 +132,7 @@ const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
       p={5}
       borderRadius={5}
       cursor="pointer"
-      onClick={() => {
-        setCompletion(todo._id, !todo.completed);
-      }}
+      onClick={handleCompletion}
     >
       <Checkbox
         variant="readonly"
@@ -88,7 +144,7 @@ const TodoItem: FunctionComponent<{ todo: Todo }> = ({ todo }) => {
       <Input
         color="black"
         variant={editing ? "flushed" : "unstyled"}
-        value={todo.name}
+        defaultValue={todo.name}
         onChange={(e) => handleTodoNameChange(e.target.value)}
         onClick={(e) => e.stopPropagation()}
         disabled={!editing}

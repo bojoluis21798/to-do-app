@@ -29,7 +29,13 @@ const useTodo = () => {
     ({ id, payload }) => service.patch(`${url}?id=${id}`, payload)
   );
 
-  const isLoading = [fetchLoading, editLoading].some((loading) => loading);
+  const { fetch: create, isLoading: createLoading } = useService((payload) =>
+    service.post(url, payload)
+  );
+
+  const isLoading = [fetchLoading, editLoading, createLoading].some(
+    (loading) => loading
+  );
 
   const revalidate = () => mutate(url);
 
@@ -115,6 +121,20 @@ const useTodo = () => {
     }
   };
 
+  const createTodo = async (
+    newTodo: Pick<Todo, Exclude<keyof Todo, "user" | "_id">>
+  ) => {
+    await mutate(
+      url,
+      { ...data, todos: [...(data?.todos || []), newTodo] },
+      false
+    );
+
+    await create(newTodo);
+
+    revalidate();
+  };
+
   return {
     todos,
     error,
@@ -124,6 +144,7 @@ const useTodo = () => {
     changeTodoName,
     setCompletion,
     submitEdits,
+    createTodo,
     revalidate,
   };
 };
